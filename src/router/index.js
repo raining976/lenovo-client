@@ -1,5 +1,8 @@
 // router/index.js 
 import { createRouter, createWebHistory } from "vue-router";
+import NProgress from 'nprogress'; // progress bar
+
+NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const files = import.meta.glob('./modules/*.js', {
     eager: true,
@@ -41,6 +44,7 @@ const router = createRouter({
 })
 
 router.afterEach((to, from) => {
+    NProgress.done();
     window.document.title = to.meta.title + " | lenovo";
 })
 
