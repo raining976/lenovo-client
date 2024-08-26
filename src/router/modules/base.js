@@ -59,7 +59,10 @@ export default [
     {
         path: '/404',
         name: '404page',
-        meta: { requiresAuth: false },
+        meta: { 
+            title:'404',
+            requiresAuth: false
+        },
         component: () => import('@/views/404/index.vue'),
     },
 ]

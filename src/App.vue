@@ -1,10 +1,12 @@
 <template>
+  <router-link to="/login">login </router-link>
+  <router-link to="/register">register </router-link>
+  <router-link to="/">home </router-link>
+  <router-link to="/order_list">order_list</router-link>
+  <br> 
   <router-view></router-view>
-  <button @click="counter.increment()">+1</button>  {{ counter.count }}
 </template>
 <script setup>
-import { useUserStore } from './store/modules/user';
-const counter = useUserStore()
 
 </script>
 <style scoped></style>

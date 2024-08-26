@@ -43,9 +43,24 @@ const router = createRouter({
     }
 })
 
+// 路由前置守卫 主要用来进行鉴权
+router.beforeEach((to, from, next) => {
+    NProgress.start();
+    if (to.meta.requiresAuth == true) {
+        // TODO: 这里判断token是否过期
+        const isLoggedIn = true
+        if (!isLoggedIn) {
+            return next('/login')
+        }
+    }
+    next()
+})
+
+// 路由后置守卫 
 router.afterEach((to, from) => {
     NProgress.done();
     window.document.title = to.meta.title + " | lenovo";
+    
 })
 
 export default router
