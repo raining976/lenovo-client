@@ -1,10 +1,8 @@
 <template>
-
-  <router-view></router-view>
+    404
 </template>
+
 <script setup>
 </script>
 <style scoped>
-
-
 </style>

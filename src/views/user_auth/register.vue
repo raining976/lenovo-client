@@ -1,10 +1,8 @@
 <template>
-
-  <router-view></router-view>
+    注册
 </template>
 <script setup>
+
 </script>
 <style scoped>
-
-
 </style>
