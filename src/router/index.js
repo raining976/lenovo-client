@@ -50,9 +50,23 @@ router.beforeEach((to, from, next) => {
         // TODO: 这里判断token是否过期
         const isLoggedIn = true
         if (!isLoggedIn) {
+           // TODO: 保留当前的路由 
             return next('/login')
         }
     }
+
+    console.log('to.path',to.path)
+    if(to.path == '/admin' ){
+        // TODO: 判断管理员是否登录
+        const isAdminLoggedIn = true
+        if(!isAdminLoggedIn){
+            // TODO: 保留当前的路由
+            return next("/adminLogin")
+        }
+
+    }
+
+    
     next()
 })
 

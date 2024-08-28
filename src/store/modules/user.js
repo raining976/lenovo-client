@@ -3,7 +3,7 @@
 export const useUserStore = defineStore({
     id: "User",
     state: () => ({
-        count: 0,
+        count: 11,
     }),
     actions: {
         increment() {

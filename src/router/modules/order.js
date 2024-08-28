@@ -1,7 +1,7 @@
 export default [
     {
-        path:'/order_list',
-        name:"order_list",
+        path:'/orders',
+        name:"orders",
         meta:{
             title:"订单列表",
             requiresAuth:true

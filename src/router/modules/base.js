@@ -29,7 +29,6 @@ export default [
     },
     {
         path: '/user_auth',
-        name: 'user_auth',
         redirect:"/login",
         meta: {
             requiresAuth: false
@@ -40,7 +39,7 @@ export default [
                 path: '/login',
                 name: 'login',
                 meta: {
-                    title: "登陆",
+                    title: "登录",
                     requiresAuth: false
                 },
                 component: () => import("@/views/user_auth/login.vue"),
