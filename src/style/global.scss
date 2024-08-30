@@ -1,0 +1,33 @@
+$background-color-light: #ffffff;
+$background-color-black: #213547;
+$background-color: $background-color-light;
+
+$color-theme: #000000;
+$color-theme-black: #ffffff;
+
+$navHeight:60px; 
+@media (prefers-color-scheme: light) {
+}
+
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: $color-theme;
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: $color-theme;
+    &:hover {
+        color: $color-theme;
+    }
+    text-decoration: none;
+}

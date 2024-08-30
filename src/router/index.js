@@ -50,31 +50,31 @@ router.beforeEach((to, from, next) => {
         // TODO: 这里判断token是否过期
         const isLoggedIn = true
         if (!isLoggedIn) {
-           // TODO: 保留当前的路由 
+            // TODO: 保留当前的路由 
             return next('/login')
         }
     }
 
-    console.log('to.path',to.path)
-    if(to.path == '/admin' ){
+    console.log('to.path', to.path)
+    if (to.meta.adminAuth) {
         // TODO: 判断管理员是否登录
         const isAdminLoggedIn = true
-        if(!isAdminLoggedIn){
+        if (!isAdminLoggedIn) {
             // TODO: 保留当前的路由
             return next("/adminLogin")
         }
 
     }
 
-    
+
     next()
 })
 
 // 路由后置守卫 
 router.afterEach((to, from) => {
     NProgress.done();
-    window.document.title = to.meta.title + " | lenovo";
-    
+    window.document.title = to.meta.title + " | " + import.meta.env.VITE_SITE_TITLE;
+
 })
 
 export default router

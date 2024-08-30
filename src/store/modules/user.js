@@ -3,11 +3,20 @@
 export const useUserStore = defineStore({
     id: "User",
     state: () => ({
-        count: 11,
+        token: '',
+        userInfo: null,
     }),
     actions: {
-        increment() {
-            this.count++;
+        getToken() {
+            return this.token
         },
+        setToken(val) {
+            this.token = val
+        }
+    },
+    // 数据持久化
+    persist: {
+        key: "user",
+        storage: localStorage,
     },
 });
