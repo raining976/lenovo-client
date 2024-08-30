@@ -13,15 +13,15 @@
 const router_list = ref([
     {
         title:"用户列表",
-        link:'user_list'
+        link:'/admin/user_list'
     },
     {
         title:"订单列表",
-        link:'order_list'
+        link:'/admin/order_list'
     },
     {
         title:"商品列表",
-        link:'good_list'
+        link:'/admin/good_list'
     },
 ])
 </script>
