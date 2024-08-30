@@ -8,3 +8,4 @@ store.use(piniaPluginPersistedstate)
 export default store
 
 export * from "./modules/user"
+export * from "./modules/site"
