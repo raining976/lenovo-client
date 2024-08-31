@@ -32,6 +32,7 @@ request.interceptors.response.use((response) => {
     return response.data
 },
     (error) => {
+        console.error('error',error)
         let msg = ''
         const status = error.response.status
         switch (status) {

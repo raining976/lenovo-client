@@ -2,7 +2,7 @@ $background-color-light: #ffffff;
 $background-color-black: #213547;
 $background-color: $background-color-light;
 
-$color-theme: #000000;
+$color-theme: #252525;
 $color-theme-black: #ffffff;
 
 $navHeight:60px; 
@@ -26,8 +26,9 @@ $navHeight:60px;
 
 a {
     color: $color-theme;
+    text-decoration: none;
+
     &:hover {
         color: $color-theme;
     }
-    text-decoration: none;
 }
