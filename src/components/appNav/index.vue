@@ -2,7 +2,7 @@
     <div class="navContainer">
         <div class="nav-left list">
             <li class="leftItem" v-for="(tab, index) in leftTabList" :key="index">
-                <router-link :to="tab.link"> {{ tab.label }}</router-link>
+                <a :href="tab.link" target="_blank" rel="noopener noreferrer">{{ tab.label }}</a> 
             </li>
         </div>
         <div class="searchContainer">
@@ -41,23 +41,23 @@ const userStore = useUserStore()
 const leftTabList = ref([
     {
         label: "新品",
-        link: "",
+        link: "https://shop.lenovo.com.cn/page/newarrival/xpzx.html",
     },
     {
         label: "定制",
-        link: "",
+        link: "https://activity.lenovo.com.cn/dingzhi.html",
     },
     {
         label: "教育特惠",
-        link: "",
+        link: "https://shop.lenovo.com.cn/page/xs/jyth.html",
     },
     {
         label: "疯狂星期肆",
-        link: "",
+        link: "https://shop.lenovo.com.cn/page/f/fkxqs.html",
     },
     {
         label: "游戏",
-        link: "",
+        link: "https://shop.lenovo.com.cn/page/game/game.html",
     },
 ])
 const searchForm = ref("")
@@ -101,10 +101,20 @@ $navHeight: 60px;
         align-items: center;
 
         height: $navHeight;
+        .loginBox,
+        .loginBox a{
+            font-size: 12.5px;
+            color: #b5b5b5;
+            transition: 0.2s;
+            &:hover{
+                color:#252525;
+            }
+        }
         .userNickname{
             line-height: 35px;
             cursor: pointer;
         }
+
     }
 }
 </style>

@@ -19,13 +19,18 @@
 export default [
     {
         path: '/',
-        name: 'home',
-        meta: {
-            title: "首页",
-            requiresAuth: false
-        },
+        redirect:"/homepage",
         component: () => import("@/views/home/index.vue"),
         children:[
+            {
+                path:'/homepage',
+                name:"homepage",
+                meta: {
+                    title: "首页",
+                    requiresAuth: false
+                },
+                component: () => import("@/views/homepage/index.vue"),
+            },
             {
                 path: '/user_auth',
                 redirect:"/login",

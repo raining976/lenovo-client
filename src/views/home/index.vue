@@ -1,5 +1,5 @@
 <template>
-  <div class="common-layout">
+  <div class="homeLayout">
     <el-container>
       <el-header height="60px" class="header">
         <router-link to="/" class="homeLink"><img src="@/assets/logo/logo2.png" alt="logo" class="logo"></router-link>
@@ -26,11 +26,12 @@ const isShow = computed(() => {
 $navHeight : 60px;
 
 .header {
-
   display: flex;
   align-items: center;
   background-color: $background-color-light;
-
+  width: $h-width;
+  margin:0 auto;
+  padding: 0;
   .homeLink,
   .logo {
     display: inline-block;
@@ -41,6 +42,6 @@ $navHeight : 60px;
 .mainContainer{
   padding: 0;
   min-height: calc(100vh - 120px);
-  background-color: aquamarine;
+  background-color: #f5f5f5;
 }
 </style>
