@@ -23,7 +23,7 @@
                             @click.prevent="validateEmail('email')" :disabled="isDisabled">{{ buttonText }}</button>
                     </el-form-item>
                     <el-form-item v-show="activeTab == 1" required prop="password">
-                        <el-input :style="inputStyle" placeholder="密码" v-model="form.password"
+                        <el-input :style="inputStyle" type="password" :show-password="true" placeholder="密码" v-model="form.password"
                             @keydown.enter="onSubmit" />
                     </el-form-item>
                     <el-form-item prop="isAgree">
@@ -308,6 +308,8 @@ const clearErrors = () => {
         .registerBox {
             text-align: end;
             margin: 15px 0;
+            font-size: 13px;
+            color: $color-theme;
         }
     }
 }
