@@ -16,6 +16,14 @@ export default [
                 }
             },
             {
+                path: "user_list/:id",  // 新增的用户详情路由
+                component: () => import("@/views/admin/user_list/details/index.vue"),
+                meta: {
+                    title: "用户详情",
+                    adminAuth: true,
+                }
+            },
+            {
                 path: "good_list",
                 component: () => import("@/views/admin/good_list/index.vue"),
                 meta: {
