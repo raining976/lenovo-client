@@ -9,10 +9,24 @@
             <el-input v-model="searchForm" style="width: 240px" placeholder="Please Input" :suffix-icon="Search" />
         </div>
         <div class="nav-right ">
-            <div class="loginBox">
+            <div class="loginBox" v-show="!userStore.isLoggedIn">
                 <router-link to="/login">登录</router-link>
                 ｜
                 <router-link to="/register">注册</router-link>
+            </div>
+            <div class="userInfoBox" v-show="userStore.isLoggedIn">
+                <el-dropdown placement="bottom">
+                    <span class="userNickname">
+                        {{ userStore.userInfo.nickname }}
+                    </span>
+                    <template #dropdown>
+                        <el-dropdown-menu class="navMenu" aria-hidden="false">
+                            <el-dropdown-item>个人中心</el-dropdown-item>
+                            <el-dropdown-item>我的订单</el-dropdown-item>
+                            <el-dropdown-item divided @click="userStore.logout()">退出登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
             </div>
         </div>
     </div>
@@ -20,6 +34,10 @@
 
 <script setup>
 import { Search } from '@element-plus/icons-vue'
+import { useUserStore } from '@/store/modules/user';
+const userStore = useUserStore()
+
+
 const leftTabList = ref([
     {
         label: "新品",
@@ -83,6 +101,10 @@ $navHeight: 60px;
         align-items: center;
 
         height: $navHeight;
+        .userNickname{
+            line-height: 35px;
+            cursor: pointer;
+        }
     }
 }
 </style>

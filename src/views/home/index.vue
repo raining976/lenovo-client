@@ -40,5 +40,7 @@ $navHeight : 60px;
 }
 .mainContainer{
   padding: 0;
+  min-height: calc(100vh - 120px);
+  background-color: aquamarine;
 }
 </style>
