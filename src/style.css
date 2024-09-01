@@ -18,7 +18,14 @@ button{
   border: none;
 }
 
+a {
+  color: #252525;
+  text-decoration: none;
 
+  &:hover {
+      color: #252525;
+  }
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
