@@ -3,7 +3,7 @@ export default [
         path: "/admin",
         component: () => import("@/views/admin/index.vue"),
         meta:{
-            title:"后台",
+            title:"首页",
             adminAuth:true,
         },
         children: [

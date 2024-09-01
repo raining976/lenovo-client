@@ -1,35 +1,47 @@
 <template>
-  
-  <el-button @click="adminSettingStore.switchFold()" type="primary" :icon="Operation" plain />
-  <div class="breadCrumb">
-    <el-breadcrumb :separator-icon="ArrowRight">
-      <el-breadcrumb-item 
-        v-for="item,index in breadcrumbItems" 
-        :key="index" 
-        :to="{ path: item.path }">
-        {{ item.meta.title }}
-      </el-breadcrumb-item>
-    </el-breadcrumb>
-  </div>
-      
-  <el-dropdown>
-    <span class="el-dropdown-link">
-      admin
+ <div class="headerContainer">
+  <div class="leftBox">
+    <span class="iconBox" @click="adminSettingStore.switchFold()" >
+      <el-icon class="icon-large" v-show="!adminSettingStore.isFold"><Fold /></el-icon>
+      <el-icon class="icon-large" v-show="adminSettingStore.isFold"><Expand /></el-icon>
     </span>
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item @click="() => closeSystem()">退出登录</el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
+    <div class="breadCrumb">
+      <el-breadcrumb :separator-icon="ArrowRight">
+        <el-breadcrumb-item 
+          v-for="item,index in breadcrumbItems" 
+          :key="index" 
+          :to="{ path: item.path }">
+          {{ item.meta.title }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+        
+  </div>
+  <div class="rightBox">
+    <el-dropdown>
+      <div class="el-dropdown-link">
+        <img class="adminEvatar" src="@/assets/icons/admin/adminAvatar.png" alt="">
+        <span >
+          admin
+        </span>
+      </div>
+      
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click="() => closeAdmin()">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
+ </div>
     
 </template>
   
 <script setup>
 
-  import { ArrowRight, Operation } from '@element-plus/icons-vue';
+  import { ArrowRight, Fold, Expand } from '@element-plus/icons-vue';
   import { useRouter } from 'vue-router';
-  import { useAdminSettingStore } from '@/store';
+  import { useAdminSettingStore } from '@/store';  //组件间传递信息
   import { ref, watch } from 'vue';
 
   const adminSettingStore = useAdminSettingStore();
@@ -44,17 +56,40 @@
   watch(
     () => currentRoute.value,
     (route) => {
-      // route.matched 保存着路由记录，包含任何已被加载并在 components 对象内被替换掉的懒加载组件
-      // meta是定义的路由里面的meta属性，可以自定义
       breadcrumbItems.value = route.matched.filter(r => r.meta && r.meta.title);
     },
     { immediate: true }
   );
 
+  const router= useRouter();
+  const closeAdmin = () =>{
+    router.replace('/adminLogin');
+  }
+
 </script>
   
 <style scoped>
+  .headerContainer{
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   
+  }
+  .headerContainer .iconBox{
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+  }
+  .icon-large {
+    font-size: 20px; /* 调整图标的大小 */
+  }
+  
+  .leftBox{
+    display: flex;
+    align-items: center;
+  }
   .breadCrumb {
     display: flex;           /* 启用 Flexbox 布局 */
     align-items: center;     /* 垂直居中对齐内容 */
@@ -69,7 +104,10 @@
     display: flex;
     align-items: center;
     color: black;
-    font-size: 15px;
+  }
+  .adminEvatar{
+    height: 25px;
+    margin-right: 10px; /* 设置图片与文本之间的间距 */
   }
   
   
