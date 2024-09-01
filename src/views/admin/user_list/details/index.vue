@@ -1,6 +1,6 @@
 <template>
+  
     <div>
-      <h1>用户详情</h1>
       <el-form :model="detail">
         <el-form-item label="账号">
           <el-input v-model="detail.accounts"></el-input>
@@ -20,9 +20,10 @@
         <el-button type="primary" @click="saveDetails">保存</el-button>
       </el-form>
     </div>
-  </template>
+
+</template>
   
-  <script lang="ts" setup>
+<script lang="ts" setup>
   import { defineProps, defineEmits } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   
@@ -38,5 +39,6 @@
     emit('updateUser', detail.value) // 触发事件，将数据传递回表格页面
     router.push('/admin/user_list')  // 保存后返回用户列表
   }
-  </script>
+
+</script>
   

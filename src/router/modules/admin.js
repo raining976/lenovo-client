@@ -13,15 +13,17 @@ export default [
                 meta: {
                     title: "用户列表",
                     adminAuth:true,
-                }
-            },
-            {
-                path: "user_list/:id",  // 新增的用户详情路由
-                component: () => import("@/views/admin/user_list/details/index.vue"),
-                meta: {
-                    title: "用户详情",
-                    adminAuth: true,
-                }
+                },
+                children:[
+                    {
+                        path: ":id",  // 新增的用户详情路由
+                        component: () => import("@/views/admin/user_list/details/index.vue"),
+                        meta: {
+                            title: "用户详情",
+                            adminAuth: true,
+                        }
+                    }
+                ]
             },
             {
                 path: "good_list",

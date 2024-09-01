@@ -1,20 +1,29 @@
 <template>
-  <el-table :data="tableData" stripe style="width: 100%">
-    <el-table-column prop="accounts" label="账号"  />
-    <el-table-column prop="name" label="昵称"  />
-    <el-table-column prop="sex" label="性别"  />
-    <el-table-column prop="balance" label="余额" />
-    <el-table-column label="操作">
-
-      <template #default="scope">
-        <el-button @click="handleEdit(scope.row)" type="primary" size="small">修改</el-button>
-        <el-button @click="handleDelete(scope.row)" type="danger" size="small">删除</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div
+    v-if="!isTableHidden" 
+    class="userTableContainer">
+    <el-table :data="tableData" stripe style="width: 100%">
+      <el-table-column prop="accounts" label="账号"  />
+      <el-table-column prop="name" label="昵称"  />
+      <el-table-column prop="sex" label="性别"  />
+      <el-table-column prop="balance" label="余额" />
+      <el-table-column label="操作">
+  
+        <template #default="scope">
+          <el-button @click="handleEdit(scope.row)" type="primary" size="small">修改</el-button>
+          <el-button @click="handleDelete(scope.row)" type="danger" size="small">删除</el-button>
+        </template>
+      </el-table-column>
+      
+    </el-table>
+  </div>
+  <div class="userDetails">
+    <router-view/>
+  </div>
+  
 </template>
 
-<script lang="ts" setup>
+<script setup>
 const router=useRouter();
 const tableData = [
   {
@@ -43,14 +52,32 @@ const tableData = [
   },
 ]
 
-const handleEdit = (row: any) => {
+const route = useRoute()
+const isTableHidden = computed(() => {
+  return route.path.includes('/admin/user_list/') && route.params.id
+})
+
+const handleEdit = (row) => {
   router.push({ 
     path: '/admin/user_list/${row.id}', 
     query: { ...row }  // 将数据作为查询参数传递
   })
 }
-const handleDelete = (row: any) => {
+const handleDelete = (row) => {
   console.log('删除:', row)
   // 删除逻辑
 }
 </script>
+
+<style scoped>
+
+.userTableContainer{
+  padding: 20px;
+}
+
+.userDetails{
+  padding: 20px;
+}
+
+
+</style>
