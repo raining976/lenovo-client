@@ -217,6 +217,7 @@ const startCountdown = () => {
 };
 
 </script>
+
 <style lang="scss" scoped>
 .registerContainer {
     width: 370px;
@@ -231,7 +232,7 @@ const startCountdown = () => {
     }
 
     .formContainer {
-        padding: 30px 0;
+        margin-top: 20px;
 
         .registerBtn {
             width: 370px;
