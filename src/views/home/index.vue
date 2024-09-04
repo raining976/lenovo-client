@@ -8,7 +8,7 @@
       <el-main class="mainContainer">
         <router-view></router-view>
       </el-main>
-      <el-footer  height="60px">Footer</el-footer>
+      <el-footer  height="60px" v-show="isShow">Footer</el-footer>
     </el-container>
   </div>
 </template>
