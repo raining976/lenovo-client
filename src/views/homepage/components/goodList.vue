@@ -1,30 +1,31 @@
 <template>
     <div class="goodListContainer">
-        <li class="subListBox">
-            <div class="title">Lenovo 电脑</div>
+        <li class="subListBox" v-for="(subList, i) in goodList" :key="i">
+            <div class="title">{{ subList.name }}</div>
             <div class="contentBox">
                 <div class="imgBox">
-                    <el-carousel :interval="5000" width="230px" height="612px"  arrow="never">
+                    <el-carousel :interval="5000" width="230px" height="612px" arrow="never">
                         <el-carousel-item v-for="item in 2" :key="item">
+
                         </el-carousel-item>
                     </el-carousel>
                 </div>
                 <div class="goodListBox">
-        <li class="good" v-for="index in 8" :key="index">
+        <li class="good" v-for="(item, j) in subList.products" :key="j">
             <router-link to="/">
                 <div class="goodImgBox">
-                    <img src="https://p2.lefile.cn/product/adminweb/2024/03/07/1ArdtVBWhIqaELuWl4F1RWRIA-7444.jpg"
+                    <img :src="item.picUrl"
                         alt="">
                 </div>
                 <div class="goodDescBox">
                     <div class="goodName">
-                        小新Pro14 AI元启
+                        {{ item.name }}
                     </div>
                     <div class="goodConfig">
-                        Ultra 9/32GB/1T SSD/集成显卡/鸽子灰
+                        {{ item.brief }}
                     </div>
                     <div class="goodPrice">
-                        ¥13820
+                        ¥{{ item.price}}
                     </div>
                 </div>
             </router-link>
@@ -34,7 +35,24 @@
     </li>
     </div>
 </template>
-<script setup></script>
+<script setup>
+const { proxy } = getCurrentInstance()
+onMounted(() => {
+    getGoodList()
+})
+const goodList = ref([])
+const getGoodList = () => {
+    proxy.$api.getHomeGoods().then(res => {
+        if(res.code == 0){
+            goodList.value = res.data
+        }
+        console.log('res', res)
+    })
+}
+
+
+
+</script>
 <style lang="scss" scoped>
 .subListBox {
     display: flex;
@@ -67,12 +85,12 @@
             justify-content: space-between;
             flex-wrap: wrap;
             width: 958px;
-
             .good {
                 width: 230px;
                 height: 300px;
                 background-color: rgb(255, 255, 255);
                 transition: box-shadow 0.3s;
+                margin-bottom:10px;
                 cursor: pointer;
 
                 .goodImgBox {
@@ -130,19 +148,20 @@
         }
     }
 }
+
 .el-carousel__item h3 {
-  color: #475669;
-  opacity: 0.75;
-  line-height: 300px;
-  margin: 0;
-  text-align: center;
+    color: #475669;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+    text-align: center;
 }
 
 .el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
+    background-color: #99a9bf;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+    background-color: #d3dce6;
 }
 </style>
