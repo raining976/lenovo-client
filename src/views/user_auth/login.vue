@@ -23,8 +23,8 @@
                             @click.prevent="validateEmail('email')" :disabled="isDisabled">{{ buttonText }}</button>
                     </el-form-item>
                     <el-form-item v-show="activeTab == 1" required prop="password">
-                        <el-input :style="inputStyle" type="password" :show-password="true" placeholder="密码" v-model="form.password"
-                            @keydown.enter="onSubmit" />
+                        <el-input :style="inputStyle" type="password" :show-password="true" placeholder="密码"
+                            v-model="form.password" @keydown.enter="onSubmit" />
                     </el-form-item>
                     <el-form-item prop="isAgree">
                         <el-checkbox label="" v-model="form.isAgree" />
@@ -61,7 +61,7 @@ const form = ref({
 
 const inputStyle = reactive({
     height: '58px',
-    backgroundColor: '#f6f6f6',
+    background: '#f6f6f6',
     color: '#c4c4c4',
     borderRadius: '4px',
     textIndent: '18px',
@@ -136,9 +136,9 @@ const changeTab = (idx) => {
 const onSubmit = () => {
     ruleFormRef.value.validate((valid) => {
         if (valid) {
-            if(activeTab.value == 0){
+            if (activeTab.value == 0) {
                 codeLogin()
-            }else {
+            } else {
                 passLogin()
             }
         } else {
@@ -151,11 +151,11 @@ const codeLogin = () => {
     const formData = {
         email: form.value.email,
         code: form.value.code
-    } 
+    }
     proxy.$api.codeLogin(formData).then(res => {
         if (res.code == 0) {
             userStore.setToken(res.data)
-            handleUserInfo()   
+            handleUserInfo()
         }
     })
 }
@@ -176,12 +176,12 @@ const handleUserInfo = () => {
     proxy.$api.getUserInfo().then(res => {
         userStore.setUserInfo(res.data)
         router.replace('/')
-       
+
     })
 }
 
 const getCode = () => {
-  proxy.$api.getLoginCode({email:form.value.email})
+    proxy.$api.getLoginCode({ email: form.value.email })
 }
 
 // 验证单个字段的方法
@@ -216,10 +216,11 @@ const clearErrors = () => {
     ruleFormRef.value.resetFields();
 };
 </script>
+
 <style lang="scss" scoped>
 .loginContainer {
     width: 370px;
-    height: 460px;
+    height: 440px;
     padding: 50px;
     background-color: $background-color-light;
 
@@ -275,6 +276,8 @@ const clearErrors = () => {
             margin-left: 40px;
         }
     }
+
+
 
     .formContainer {
         padding: 30px 0;
