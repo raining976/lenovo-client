@@ -13,7 +13,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-  
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="昵称">
@@ -30,7 +30,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-  
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="余额">
@@ -38,7 +38,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-  
+
       <el-form-item>
         <el-button type="primary" @click="saveDetails">保存</el-button>
         <el-button @click="cancel">取消</el-button>
@@ -53,7 +53,9 @@ import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
-
+const props = defineProps({
+  id:String,
+})
 const detail = ref({
   userId: '',
   email: '',
@@ -61,13 +63,11 @@ const detail = ref({
   sex: '',
   balance: ''
 });
-
-onMounted(() => {
-  const { query } = route;
-  if (query) {
-    detail.value = { ...query };
-  }
-});
+onMounted(()=>{
+  console.log('user id:',props.id)
+  // 发起请求 根据该id 获取用户详细信息
+  // 拿到信息后存到dtail对象
+})
 
 const saveDetails = () => {
   // Emit the details back to the table page or perform other save actions

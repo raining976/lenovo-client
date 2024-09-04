@@ -10,8 +10,8 @@
         <el-breadcrumb-item 
           v-for="item,index in breadcrumbItems" 
           :key="index" 
-          :to="{ path: item.path }">
-          {{ item.meta.title }}
+          :to="item.path">
+          {{ item.title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -43,7 +43,6 @@
   import { useRouter } from 'vue-router';
   import { useAdminSettingStore } from '@/store';  //组件间传递信息
   import { ref, watch } from 'vue';
-
   const adminSettingStore = useAdminSettingStore();
 
   // 获取路由信息
@@ -55,8 +54,19 @@
   // 监听当前路由变化
   watch(
     () => currentRoute.value,
-    (route) => {
-      breadcrumbItems.value = route.matched.filter(r => r.meta && r.meta.title);
+    (newRoute) => {
+      if(newRoute.meta.title==="用户详情"){
+        breadcrumbItems.value.push({
+            title: "用户详情",
+            path: newRoute.fullPath
+        })
+      }
+      else{
+        breadcrumbItems.value = newRoute.matched
+          .filter(r => r.meta && r.meta.title)
+          .map(r => ({ title: r.meta.title, path: r.path }));
+      }
+      
     },
     { immediate: true }
   );
