@@ -9,7 +9,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="订单号">
-              <el-input v-model="detail.orderNumber"></el-input>
+              <el-input v-model="detail.orderNumber"disabled></el-input>
             </el-form-item>
           </el-col>
         </el-row>
