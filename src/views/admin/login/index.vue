@@ -21,7 +21,7 @@
 <script setup>
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import axios from 'axios'; // 需要确保 axios 已经安装并正确引入
+  import axios from 'axios'; 
 
   // 定义响应式数据
   const loginForm = ref({
