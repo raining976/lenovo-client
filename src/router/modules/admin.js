@@ -31,7 +31,17 @@ export default [
                 meta: {
                     title: "商品列表",
                     adminAuth:true,
-                }
+                },
+                children:[
+                    {
+                        path: ":id",  // 新增的商品详情路由
+                        component: () => import("@/views/admin/good_list/details/index.vue"),
+                        meta: {
+                            title: "商品详情",
+                            adminAuth: true,
+                        }
+                    }
+                ]
             },
             {
                 path: "order_list",
@@ -39,7 +49,17 @@ export default [
                 meta: {
                     title: "订单列表",
                     adminAuth:true,
-                }
+                },
+                children:[
+                    {
+                        path: ":id",  // 新增的用户详情路由
+                        component: () => import("@/views/admin/order_list/details/index.vue"),
+                        meta: {
+                            title: "订单详情",
+                            adminAuth: true,
+                        }
+                    }
+                ]
             },
 
 
