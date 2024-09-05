@@ -1,6 +1,5 @@
 <template>
     <div
-      v-if="!isTableHidden" 
       class="orderTableContainer">
       <div class="tableHeadaddShadow">
         <div class="tableHeadContainer">
@@ -73,9 +72,6 @@
       </div>
     </div>
   
-    <div class="orderDetails">
-      <router-view/>
-    </div>
   </template>
   
   <script setup>
@@ -171,16 +167,9 @@
     Pagination.value.currentPage = val;
   };
   
-  const isTableHidden = computed(() => {
-    return route.path.includes('/admin/order_list/') && route.params.id;
-  });
-  
   const handleEdit = (row) => {
-    router.push({
-      path: '/admin/order_list/${row.orderNumber}',
-      query: { ...row },
-    });
-  };
+    router.push(`/admin/orderInfo/${row.orderNumber}`)
+  }
  
   const handleDelete = (row) => {
     const index = orderData.value.findIndex(item => item.orderNumber === row.orderNumber);

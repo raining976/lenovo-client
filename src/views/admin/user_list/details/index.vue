@@ -52,7 +52,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
-const route = useRoute();
+
 const props = defineProps({
   id:String,
 })
@@ -63,6 +63,7 @@ const detail = ref({
   sex: '',
   balance: ''
 });
+
 onMounted(()=>{
   console.log('user id:',props.id)
   // 发起请求 根据该id 获取用户详细信息

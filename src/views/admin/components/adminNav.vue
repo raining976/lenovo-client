@@ -66,7 +66,21 @@ const adminSettingStore = useAdminSettingStore()
 import { useRoute } from 'vue-router';
 
 const route = useRoute()
-const activeMenu = computed(() => route.path)
+const activeMenu = computed(() => {
+  // 返回当前路径或父路径
+  const path = route.path;
+  if (path.startsWith('/admin/goodsInfo')) {
+    return '/admin/good_list'; 
+  }
+  if (path.startsWith('/admin/orderInfo')) {
+    return '/admin/order_list'; 
+  }
+  if (path.startsWith('/admin/userInfo')) {
+    return '/admin/user_list'; 
+  }
+  return path;
+
+})
 
 
 

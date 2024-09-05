@@ -67,7 +67,7 @@
   const saveDetails = () => {
     // Emit the details back to the table page or perform other save actions
     console.log('保存商品详情:', detail.value);
-    router.push('/admin/good_list'); // Return to the product list after saving
+    router.replace('/admin/good_list'); // Return to the product list after saving
   };
  
   </script>
