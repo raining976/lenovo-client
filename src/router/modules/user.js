@@ -87,6 +87,15 @@ export default [
                     requireAuth: false,
                 },
                 component: () => import ("@/views/good_info/index.vue")
+            },
+            {
+                path:'/search',
+                props:true,
+                meta:{
+                    title:"搜索页",
+                    requiresAuth: false,
+                },
+                component: () => import ("@/views/search/index.vue")
             }
 
 

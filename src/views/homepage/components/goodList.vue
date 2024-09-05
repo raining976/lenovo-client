@@ -5,7 +5,7 @@
             <div class="contentBox">
                 <div class="imgBox">
                     <el-carousel :interval="5000" width="230px" height="612px" arrow="never">
-                        <el-carousel-item v-for="link in subList.imgUrl" :key="item">
+                        <el-carousel-item v-for="link in subList.imgUrl" >
                             <img :src="link" alt="">
                         </el-carousel-item>
                     </el-carousel>

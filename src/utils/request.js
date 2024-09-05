@@ -26,9 +26,9 @@ request.interceptors.response.use((response) => {
     if (response.data.code == 1) {
         errorNotice(response.data.msg)
     }
-    if (response.data.code == 0) {
-        successNotice(response.data.msg)
-    }
+    // if (response.data.code == 0) {
+    //     successNotice(response.data.msg)
+    // }
     return response.data
 },
     (error) => {
