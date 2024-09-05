@@ -42,6 +42,6 @@ $navHeight : 60px;
 .mainContainer{
   padding: 0;
   min-height: calc(100vh - 120px);
-  background-color: #f5f5f5;
+  
 }
 </style>

@@ -1,8 +1,9 @@
 <template>
-    <div>
+    <div class="homePageContainer">
         <myCarousel/>
+        <iconList/>
         <div class="h">
-            <iconList/>
+            
             <goodList/>
         </div>
     </div>
@@ -14,8 +15,12 @@ import iconList  from "./components/iconList.vue";
 import goodList from "./components/goodList.vue";
 </script>
 <style lang="scss" scoped>
+.homePageContainer{
+    background-color: #f5f5f5;
+}
 .h{
     width: $h-width;
     margin: 0 auto;
 }
+
 </style>
