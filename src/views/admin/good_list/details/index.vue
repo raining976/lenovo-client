@@ -57,12 +57,15 @@
     stockQuantity: ''
   });
   
-  onMounted(() => {
-    const { query } = route;
-    if (query) {
-      detail.value = { ...query };
-    }
-  });
+  const props = defineProps({
+    id:String,
+  })
+
+  onMounted(()=>{
+    console.log('goods id:',props.id)
+    // 发起请求 根据该id 获取用户详细信息
+    // 拿到信息后存到dtail对象
+  })
   
   const saveDetails = () => {
     // Emit the details back to the table page or perform other save actions

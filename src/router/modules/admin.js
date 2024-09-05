@@ -35,6 +35,7 @@ export default [
             },
             {
                 path: 'goodsInfo/:id',  
+                props:true,
                 component: () => import("@/views/admin/good_list/details/index.vue"),
                 meta: {
                     title: "商品详情",
@@ -51,6 +52,7 @@ export default [
             },
             {
                 path: "orderInfo/:id",  
+                props:true,
                 component: () => import("@/views/admin/order_list/details/index.vue"),
                 meta: {
                     title: "订单详情",

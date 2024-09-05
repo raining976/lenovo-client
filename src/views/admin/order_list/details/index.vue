@@ -78,13 +78,31 @@
   import { ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   
-  const props = defineProps(['creationTime', 'orderNumber', 'productName', 'unitPrice', 'quantity', 'recipient', 'totalAmount', 'status', 'paymentStatus']);
+
   const emit = defineEmits(['updateOrder']);
   
   const router = useRouter();
-  const route = useRoute();
   
-  const detail = ref({ ...route.query }); // Initialize data from route query
+  const props = defineProps({
+    id:String,
+  })
+  const detail = ref({
+    creationTime: '2024-09-05 13:15:00',
+    orderNumber: '5566778899',
+    productName: '商品E',
+    unitPrice: '￥400.00',
+    quantity: 1,
+    recipient: '孙七',
+    totalAmount: '￥400.00',
+    status: '待发货',
+    paymentStatus: '待付款'
+  });
+
+  onMounted(()=>{
+    console.log('order id:', props.id)
+    // 发起请求 根据该id 获取用户详细信息
+    // 拿到信息后存到dtail对象
+  })
   
   const saveDetails = () => {
     emit('updateOrder', detail.value); // Emit event to pass data back to the table page
