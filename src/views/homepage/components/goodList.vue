@@ -5,14 +5,14 @@
             <div class="contentBox">
                 <div class="imgBox">
                     <el-carousel :interval="5000" width="230px" height="612px" arrow="never">
-                        <el-carousel-item v-for="item in 2" :key="item">
-
+                        <el-carousel-item v-for="link in subList.imgUrl" :key="item">
+                            <img :src="link" alt="">
                         </el-carousel-item>
                     </el-carousel>
                 </div>
                 <div class="goodListBox">
         <li class="good" v-for="(item, j) in subList.products" :key="j">
-            <router-link to="/">
+            <router-link :to="`/product/${item.productId}`">
                 <div class="goodImgBox">
                     <img :src="item.picUrl"
                         alt="">
@@ -46,7 +46,6 @@ const getGoodList = () => {
         if(res.code == 0){
             goodList.value = res.data
         }
-        console.log('res', res)
     })
 }
 
