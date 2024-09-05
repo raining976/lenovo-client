@@ -1,16 +1,20 @@
 <template>
     <div class="iconListContainer">
-        <div class="iconList">
-            <li class="item" v-for="(item, index) in textList" :key="index" @mouseover="activeIndex = index"
-                @mouseout="activeIndex = -1">
-                <a :href="item.link" target="_blank">
-                    <div class="iconBox">
-                        <img v-show="!(activeIndex == index)" :src="`/src/assets/icons/home_icons/icon${index+1}.png`" alt="">
-                        <img v-show="activeIndex == index" :src="`/src/assets/icons/home_icons_hover/icon${index+1}_hover.png`" alt="">
-                    </div>
-                    <div class="textBox">{{ item.text }}</div>
-                </a>
-            </li>
+        <div class="h">
+            <div class="iconList">
+                <li class="item" v-for="(item, index) in textList" :key="index" @mouseover="activeIndex = index"
+                    @mouseout="activeIndex = -1">
+                    <a :href="item.link" target="_blank">
+                        <div class="iconBox">
+                            <img v-show="!(activeIndex == index)"
+                                :src="`/src/assets/icons/home_icons/icon${index + 1}.png`" alt="">
+                            <img v-show="activeIndex == index"
+                                :src="`/src/assets/icons/home_icons_hover/icon${index + 1}_hover.png`" alt="">
+                        </div>
+                        <div class="textBox">{{ item.text }}</div>
+                    </a>
+                </li>
+            </div>
         </div>
     </div>
 </template>
@@ -72,44 +76,54 @@ const textList = ref([
 
 </script>
 <style lang="scss" scoped>
-.iconList {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .item a {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 95px;
-        height: 95px;
-        transition: 0.2s;
-
-        &:hover {
-            transform: translateY(-3px);
-
-            .textBox {
-                color: #e1140a;
-            }
-        }
-
-        .iconBox {
-            img {
-                width: 30px;
-                height: 30px;
-            }
-        }
-
-        .textBox {
-            font-size: 13px;
-            color: #505050;
-            height: 16px;
-            line-height: 16px;
-            text-align: center;
-        }
+.iconListContainer {
+    background-color: #ffffff;
+    .h {
+        width: $h-width;
+        margin: 0 auto;
     }
 
+    .iconList {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
+
+
+        .item a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 95px;
+            height: 95px;
+            transition: 0.2s;
+
+            &:hover {
+                transform: translateY(-3px);
+
+                .textBox {
+                    color: #e1140a;
+                }
+            }
+
+            .iconBox {
+                img {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+
+            .textBox {
+                font-size: 13px;
+                color: #505050;
+                height: 16px;
+                line-height: 16px;
+                text-align: center;
+            }
+        }
+
+
+    }
 }
 </style>
