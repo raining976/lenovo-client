@@ -2,11 +2,16 @@
     <div class="navContainer">
         <div class="nav-left list">
             <li class="leftItem" v-for="(tab, index) in leftTabList" :key="index">
-                <a :href="tab.link" target="_blank" rel="noopener noreferrer">{{ tab.label }}</a> 
+                <a :href="tab.link" target="_blank" rel="noopener noreferrer">{{ tab.label }}</a>
             </li>
         </div>
         <div class="searchContainer">
-            <el-input v-model="searchForm" style="width: 240px" placeholder="Please Input" :suffix-icon="Search" />
+            <el-input v-model="searchStore.searchForm.pattern" style="min-width: 260px" placeholder=""
+                class="input-with-select" @keydown.enter="search()">
+                <template #append>
+                    <el-button :icon="Search" @click.prevent="search()" />
+                </template>
+            </el-input>
         </div>
         <div class="nav-right ">
             <div class="loginBox" v-show="!userStore.isLoggedIn">
@@ -34,8 +39,13 @@
 
 <script setup>
 import { Search } from '@element-plus/icons-vue'
-import { useUserStore } from '@/store/modules/user';
+import { useUserStore, useSearchStore } from '@/store';
+import router from "@/router"
+import { useRoute } from 'vue-router';
+const route = useRoute()
+
 const userStore = useUserStore()
+const searchStore = useSearchStore()
 
 
 const leftTabList = ref([
@@ -60,7 +70,15 @@ const leftTabList = ref([
         link: "https://shop.lenovo.com.cn/page/game/game.html",
     },
 ])
-const searchForm = ref("")
+
+
+const search = () => {
+    if (route.path != '/search')
+        router.push({
+            path: '/search',
+        })
+    searchStore.search()
+}
 </script>
 <style lang="scss" scoped>
 $navHeight: 60px;
@@ -101,16 +119,19 @@ $navHeight: 60px;
         align-items: center;
 
         height: $navHeight;
+
         .loginBox,
-        .loginBox a{
+        .loginBox a {
             font-size: 12.5px;
             color: #b5b5b5;
             transition: 0.2s;
-            &:hover{
-                color:#252525;
+
+            &:hover {
+                color: #252525;
             }
         }
-        .userNickname{
+
+        .userNickname {
             line-height: 35px;
             cursor: pointer;
         }

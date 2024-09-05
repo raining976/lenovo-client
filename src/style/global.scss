@@ -8,7 +8,10 @@ $color-theme-black: #ffffff;
 $navHeight:60px; 
 
 $h-width: 1200px;
-
+.h{
+    width: $h-width;
+    margin: 0 auto;
+}
 @media (prefers-color-scheme: light) {
 }
 

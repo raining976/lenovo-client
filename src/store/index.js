@@ -10,3 +10,5 @@ export default store
 export * from "./modules/user"
 export * from "./modules/site"
 export * from "./modules/adminSetting"
+
+export * from "./modules/search"
