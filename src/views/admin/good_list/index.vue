@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isTableHidden" class="productTableContainer">
+    <div class="productTableContainer">
       <div class="tableHeadaddShadow">
         <div class="tableHeadContainer">
           <el-form :inline="true">
@@ -56,19 +56,14 @@
         </div>
       </div>
     </div>
-  
-    <div class="productDetails">
-      <router-view />
-    </div>
   </template>
   
   <script setup>
   import { ref, computed } from 'vue';
   import { Search, CirclePlus, Delete } from '@element-plus/icons-vue';
-  import { useRouter, useRoute } from 'vue-router';
+  import { useRouter } from 'vue-router';
   
   const router = useRouter();
-  const route = useRoute();
   
   const searchInput = ref({ productId: '' });
   
@@ -130,16 +125,9 @@
     Pagination.value.currentPage = val;
   };
   
-  const isTableHidden = computed(() => {
-    return route.path.includes('/admin/good_list/') && route.params.id;
-  });
-  
   const handleEdit = (row) => {
-    router.push({
-      path: '/admin/good_list/${row.productId}',
-      query: { ...row },
-    });
-  };
+    router.push(`/admin/goodsInfo/${row.productId}`)
+  }
 
   const handleDelete = (row) => {
     const index = productData.value.findIndex(item => item.productId === row.productId);
@@ -164,9 +152,9 @@
   const addProduct = () => {
     console.log('新增商品');
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .tableHeadaddShadow {
     margin-bottom: 20px;
   }
@@ -198,5 +186,5 @@
   .productDetails {
     padding: 20px;
   }
-  </style>
+</style>
   

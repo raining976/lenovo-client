@@ -88,7 +88,7 @@
   
   const saveDetails = () => {
     emit('updateOrder', detail.value); // Emit event to pass data back to the table page
-    router.push('/admin/order_list'); // Return to the order list after saving
+    router.replace('/admin/order_list'); // Return to the order list after saving
   };
   </script>
   
