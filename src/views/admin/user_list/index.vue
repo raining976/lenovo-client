@@ -52,12 +52,7 @@
         </el-pagination>
 
       </div>
-
-
     </div>
-
-
-
   </div>
 
 
@@ -200,7 +195,6 @@
       console.error('删除失败:', error);
     }
   };
-  
   const addUser=()=>{
     console.log('新增用户')
     const newuser={

@@ -55,18 +55,14 @@
   watch(
     () => currentRoute.value,
     (newRoute) => {
-      if(newRoute.meta.title==="用户详情"){
-        breadcrumbItems.value.push({
-            title: "用户详情",
-            path: newRoute.fullPath
-        })
+      if(newRoute.meta.title==="用户详情"||newRoute.meta.title==="订单详情"||newRoute.meta.title==="商品详情"){
+        breadcrumbItems.value.push(newRoute.meta)
       }
       else{
         breadcrumbItems.value = newRoute.matched
           .filter(r => r.meta && r.meta.title)
           .map(r => ({ title: r.meta.title, path: r.path }));
       }
-      
     },
     { immediate: true }
   );
