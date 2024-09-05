@@ -19,12 +19,12 @@
 export default [
     {
         path: '/',
-        redirect:"/homepage",
+        redirect: "/homepage",
         component: () => import("@/views/home/index.vue"),
-        children:[
+        children: [
             {
-                path:'/homepage',
-                name:"homepage",
+                path: '/homepage',
+                name: "homepage",
                 meta: {
                     title: "首页",
                     requiresAuth: false
@@ -33,7 +33,7 @@ export default [
             },
             {
                 path: '/user_auth',
-                redirect:"/login",
+                redirect: "/login",
                 meta: {
                     requiresAuth: false
                 },
@@ -57,31 +57,41 @@ export default [
                         },
                         component: () => import("@/views/user_auth/register.vue"),
                     },
-                    {
-                        path: '/404',
-                        name: '404page',
-                        meta: { 
-                            title:'404',
-                            requiresAuth: false
-                        },
-                        component: () => import('@/views/404/index.vue'),
-                    },
-                    {
-                        path:'/orders',
-                        name:"orders",
-                        meta:{
-                            title:"订单列表",
-                            requiresAuth:true
-                        },
-                        component: () => import("@/views/order/order_list.vue")
-                    },
+
 
                 ]
             },
-           
+            {
+                path: '/404',
+                name: '404page',
+                meta: {
+                    title: '404',
+                    requiresAuth: false
+                },
+                component: () => import('@/views/404/index.vue'),
+            },
+            {
+                path: '/orders',
+                name: "orders",
+                meta: {
+                    title: "订单列表",
+                    requiresAuth: true
+                },
+                component: () => import("@/views/order/order_list.vue")
+            },
+            {
+                path: '/product/:id',
+                props: true,
+                meta: {
+                    title: "商品详情",
+                    requireAuth: false,
+                },
+                component: () => import ("@/views/good_info/index.vue")
+            }
+
 
         ]
 
     },
-   
+
 ]
