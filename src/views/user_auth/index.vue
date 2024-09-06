@@ -36,6 +36,10 @@
     margin: 0 5px;
    
 }
+::v-deep .el-input__suffix-inner .el-icon{
+    width: 30px;
+    margin: 0 auto;
+}
 </style>
 <style lang="scss" scoped>
 .authContainer {

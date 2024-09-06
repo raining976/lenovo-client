@@ -34,7 +34,7 @@ request.interceptors.response.use((response) => {
     (error) => {
         console.error('error', error)
         let msg = ''
-        const status = error.response.status
+        const status = error.response?.status
         switch (status) {
             case 500:
                 router.push('/404')
@@ -52,11 +52,22 @@ request.interceptors.response.use((response) => {
     })
 
 
-function get(url, params) {
-    return request.get(url, { params })
+function get(url, params, isNotice = false) {
+    return request.get(url, { params }).then(res => {
+        if (isNotice) {
+            successNotice(res.msg)
+        }
+        return res
+    })
 }
-function post(url, data) {
-    return request.post(url, data)
+function post(url, data, isNotice = false) {
+    return request.post(url, data).then(res => {
+        console.log('test', isNotice)
+        if (isNotice) {
+            successNotice(res.msg)
+        }
+        return res
+    })
 }
 
 export { get, post }

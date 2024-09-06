@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="formContainer">
-                <el-form ref="ruleFormRef" :model="form" label-width="auto" style="width: 360px" :rules="formRule">
+                <el-form ref="ruleFormRef" :model="form" label-width="auto" style="width: 360px" :rules="formRule" status-icon>
                     <el-form-item required prop="email">
                         <el-input :style="inputStyle" placeholder="邮箱" v-model="form.email" @keydown.enter="onSubmit" />
                     </el-form-item>
@@ -166,6 +166,7 @@ const passLogin = () => {
         password: form.value.password
     }
     proxy.$api.passLogin(formData).then(res => {
+        console.log('login res',res)
         if (res.code == 0) {
             userStore.setToken(res.data)
             handleUserInfo()
