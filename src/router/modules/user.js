@@ -70,15 +70,7 @@ export default [
                 },
                 component: () => import('@/views/404/index.vue'),
             },
-            {
-                path: '/orders',
-                name: "orders",
-                meta: {
-                    title: "订单列表",
-                    requiresAuth: true
-                },
-                component: () => import("@/views/order/order_list.vue")
-            },
+           
             {
                 path: '/product/:id',
                 props: true,
@@ -96,6 +88,44 @@ export default [
                     requiresAuth: false,
                 },
                 component: () => import ("@/views/search/index.vue")
+            },
+            {
+                path:'/user_center',
+                redirect:'/user_info',
+                meta:{
+                    title:'个人中心',
+                    requiresAuth:true,
+                },
+                component: () => import ('@/views/user_center/index.vue'),
+                children:[
+                    {
+                        path:'/user_info',
+                        name:'user_info',
+                        meta:{
+                            title:"个人信息",
+                            requiresAuth:true,
+                        },
+                        component:() => import ('@/views/user_center/views/user_info.vue')
+                    },
+                    {
+                        path:'/change_pass',
+                        name:'change_pass',
+                        meta:{
+                            title:"修改密码",
+                            requiresAuth:true,
+                        },
+                        component:() => import ('@/views/user_center/views/change_pass.vue')
+                    },
+                    {
+                        path: '/orders',
+                        name: "orders",
+                        meta: {
+                            title: "订单列表",
+                            requiresAuth: true
+                        },
+                        component: () => import("@/views/user_center/views/order_list.vue")
+                    },
+                ]
             }
 
 

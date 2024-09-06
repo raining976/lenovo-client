@@ -2,7 +2,7 @@
     <div class="registerContainer">
         <div class="title">注册联想账号</div>
         <div class="formContainer">
-            <el-form ref="ruleFormRef" :model="form" label-width="auto" style="width: 360px" :rules="formRule">
+            <el-form ref="ruleFormRef" :model="form" label-width="auto" style="width: 360px" :rules="formRule" status-icon>
                 <el-form-item required prop="email">
                     <el-input :style="inputStyle" placeholder="邮箱" v-model="form.email" @keydown.enter="onSubmit" />
                 </el-form-item>

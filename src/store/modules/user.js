@@ -14,6 +14,7 @@ export const useUserStore = defineStore({
             email: "",
             id: 1,
             nickname: "",
+            gender:""
         },
     }),
     getters: {
@@ -30,7 +31,6 @@ export const useUserStore = defineStore({
         },
         setUserInfo(data) {
            this.userInfo = reactive(data)
-            console.log('this.userInfo', this.userInfo)
         },
         logout(){
             this.token = null
