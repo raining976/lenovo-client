@@ -54,9 +54,13 @@
   // 监听当前路由变化
   watch(
     () => currentRoute.value,
-    (newRoute) => {
-      if(newRoute.meta.title==="用户详情"||newRoute.meta.title==="订单详情"||newRoute.meta.title==="商品详情"){
-        breadcrumbItems.value.push(newRoute.meta)
+    (newRoute,oldRoute) => {
+      if(newRoute.meta.isInfo){
+        if(!oldRoute){ //刷新界面
+          breadcrumbItems.value.push({title:"后台首页",path:"/admin"});
+          breadcrumbItems.value.push(newRoute.meta.fatherRoute);
+        }
+        breadcrumbItems.value.push(newRoute.meta);
       }
       else{
         breadcrumbItems.value = newRoute.matched
