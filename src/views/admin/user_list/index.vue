@@ -30,8 +30,8 @@
           :cell-style="{ 'text-align': 'center' }">
 
           <el-table-column type="selection" width="55" />
-          <el-table-column prop="userId" label="用户ID" />
-          <el-table-column prop="email" label="账号" />
+          <el-table-column prop="userID" label="用户ID" />
+          <el-table-column prop="email" label="邮箱账号" />
           <el-table-column prop="name" label="昵称" />
           <el-table-column prop="sex" label="性别" :formatter="formatSex" />
           <el-table-column prop="balance" label="余额" />
@@ -60,7 +60,8 @@
 
 <script setup>
   import { Search, CirclePlus, Delete } from '@element-plus/icons-vue'
-
+  
+  const { proxy } = getCurrentInstance()
 
   const router = useRouter();
 
@@ -81,51 +82,51 @@
 
 
 
-  const Dataset = [
+  const Dataset = [  //假数据
     {
-      userId: '1',
+      userID: 'lenovo1',
       email: '13664@qq.com',
       name: 'Tom',
       sex: '1',
       balance: '￥1000.00'
     },
     {
-      userId: '2',
+      userID: 'lenovo2',
       email: '187@qq.com',
       name: 'Tom',
       sex: '1',
       balance: '￥1000.00'
     },
     {
-      userId: '3',
+      userID: 'lenovo3',
       email: '144464@qq.com',
       name: 'Tom',
       sex: '1',
       balance: '￥1000.00'
     },
     {
-      userId: '4',
+      userID: 'lenovo4',
       email: '123144@qq.com',
       name: 'Tom',
       sex: '1',
       balance: '￥1000.00'
     },
     {
-      userId: '5',
+      userID: 'lenovo5',
       email: '1332164@qq.com',
       name: 'Tom',
       sex: '1',
       balance: '￥1000.00'
     },
     {
-      userId: '6',
+      userID: 'lenovo6',
       email: '122221335@qq.com',
       name: 'Tom',
       sex: '1',
       balance: '￥1000.00'
     },
     {
-      userId: '7',
+      userID: 'lenovo7',
       email: '111111@qq.com',
       name: 'Tom',
       sex: '1',
@@ -177,7 +178,7 @@
   }
 
   const handleEdit = (row) => {
-    router.push(`/admin/userInfo/${row.userId}`)
+    router.replace(`/admin/userInfo/${row.userID}`)
   }
 
   const handleDelete = async (row) => { //向后端发起请求
@@ -197,17 +198,15 @@
   };
   const addUser=()=>{
     console.log('新增用户')
+    const newID = getDataLength()+1;
     const newuser={
-      id: 'lenovo1',
+      userID: 'lenovo' + newID,
       email: '',
       name: '',
       sex: '1',
       balance: '￥1000.00'
     };
-    router.push({ 
-      path: '/admin/user_list/${newuser.id}', 
-      query: { ...newuser }  // 将数据作为查询参数传递
-    })
+    router.push(`/admin/userInfo/${newuser.userID}`)
   }
 
   //选择+批量删除
@@ -224,7 +223,7 @@
     }
 
     // 获取要删除的项邮箱
-    const idsToDelete = selectedRows.value.map(row => row.id);
+    const idsToDelete = selectedRows.value.map(row => row.userID);
     console.log(idsToDelete)
 
     try {
@@ -233,14 +232,14 @@
       console.log('删除成功');
 
       // 从表格数据中移除已删除的项
-      tableData.value = tableData.value.filter(
-        item => !idsToDelete.includes(item.id)
-      );
-  //    tableData.value = getData(1,Pagination.value.pageSize);
-      //改变分页器总数
-      Pagination.value.total -= idsToDelete.length
-      // 清空选中的行
-      selectedRows.value = [];
+  //     tableData.value = tableData.value.filter(
+  //       item => !idsToDelete.includes(item.id)
+  //     );
+  // //    tableData.value = getData(1,Pagination.value.pageSize);
+  //     //改变分页器总数
+  //     Pagination.value.total -= idsToDelete.length
+  //     // 清空选中的行
+  //     selectedRows.value = [];
     } catch (error) {
       console.error('删除失败:', error);
     }
