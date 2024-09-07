@@ -4,12 +4,14 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="用户ID">
-            <el-input v-model="detail.userId" disabled></el-input>
+            <el-input 
+            v-model="detail.userID" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="账号">
-            <el-input v-model="detail.email" disabled></el-input>
+          <el-form-item label="邮箱账号">
+            <el-input v-model="detail.email" 
+              :disabled="!isAddNew"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -48,37 +50,60 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+  import { onMounted } from 'vue';
 
-const router = useRouter();
 
-const props = defineProps({
-  id:String,
-})
-const detail = ref({
-  userId: '',
-  email: '',
-  name: '',
-  sex: '',
-  balance: ''
-});
+  const router = useRouter();
 
-onMounted(()=>{
-  console.log('user id:',props.id)
-  // 发起请求 根据该id 获取用户详细信息
-  // 拿到信息后存到dtail对象
-})
+  const props = defineProps({
+    id:String,
+  })
 
-const saveDetails = () => {
-  // Emit the details back to the table page or perform other save actions
-  console.log('保存用户详情:', detail.value);
-  router.push('/admin/user_list'); // Return to the user list after saving
-};
+  
 
-const cancel = () => {
-  router.push('/admin/user_list'); // Return to the user list without saving
-};
+  onMounted(()=>{
+
+    console.log('user id:',props.id)
+    // 发起请求 根据该id 获取用户详细信息
+    // 拿到信息后存到dtail对象
+  })
+
+  const detail = ref({
+    userID: props.id,
+    email: '',
+    name: '',
+    sex: '1',
+    balance: ''
+  });
+
+  
+
+  const saveDetails = () => {
+    // Emit the details back to the table page or perform other save actions
+    console.log('保存用户详情:', detail.value);
+    const saveVal = detail.value;
+    if(saveVal.email===''){
+      alert('邮箱账号不能为空');
+      return;
+    }
+    else if(saveVal.name===''){
+      alert('昵称不能为空');
+      return;
+    }
+    else if(saveVal.balance===''){
+      alert('余额不能为空');
+      return;
+    }
+    router.replace('/admin/user_list'); // Return to the user list after saving
+  };
+
+  const cancel = () => {
+    router.push('/admin/user_list'); // Return to the user list without saving
+  };
+
+  const isAddNew = computed(
+    () => detail.value.email===''
+  );
 </script>
 
 <style scoped>

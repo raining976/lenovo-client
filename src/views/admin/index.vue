@@ -19,9 +19,11 @@
 import pageNav from './components/adminNav.vue'
 import pageHeader from './components/adminHead.vue'
 </script>
+
+
 <style scoped> 
 
-html, body {
+  html, body {
     height: 100%;
     margin: 0;
   }

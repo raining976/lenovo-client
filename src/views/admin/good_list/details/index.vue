@@ -1,6 +1,6 @@
 <template>
     <div class="productDetailContainer">
-      <el-form :model="detail" label-width="120px" class="product-form">
+      <el-form :model="detail" label-width="100px" class="product-form">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="商品ID">
@@ -17,7 +17,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="简介">
-              <el-input v-model="detail.description" type="textarea" rows="4"></el-input>
+              <el-input v-model="detail.description" type="textarea" :rows="4"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -40,9 +40,9 @@
         </el-form-item>
       </el-form>
     </div>
-  </template>
+</template>
   
-  <script setup>
+<script setup>
   import { ref } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   
@@ -73,9 +73,9 @@
     router.replace('/admin/good_list'); // Return to the product list after saving
   };
  
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .productDetailContainer {
     padding: 20px;
     background-color: #fff;
@@ -93,5 +93,5 @@
   .el-button {
     margin-right: 10px;
   }
-  </style>
+</style>
   

@@ -72,14 +72,9 @@
         </el-form-item>
       </el-form>
     </div>
-  </template>
+</template>
   
-  <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  
-
-  const emit = defineEmits(['updateOrder']);
+<script setup>
   
   const router = useRouter();
   
@@ -105,12 +100,11 @@
   })
   
   const saveDetails = () => {
-    emit('updateOrder', detail.value); // Emit event to pass data back to the table page
-    router.replace('/admin/order_list'); // Return to the order list after saving
+    router.replace('/admin/order_list');
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .order-form {
     max-width: 800px;
     margin: 0 auto;
@@ -118,5 +112,5 @@
   .el-form-item {
     width: 100%;
   }
-  </style>
+</style>
   
