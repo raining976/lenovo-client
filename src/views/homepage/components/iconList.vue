@@ -7,9 +7,9 @@
                     <a :href="item.link" target="_blank">
                         <div class="iconBox">
                             <img v-show="!(activeIndex == index)"
-                                :src="`/src/assets/icons/home_icons/icon${index + 1}.png`" alt="">
+                                :src="`/public/icons/home_icons/icon${index + 1}.png`" alt="">
                             <img v-show="activeIndex == index"
-                                :src="`/src/assets/icons/home_icons_hover/icon${index + 1}_hover.png`" alt="">
+                                :src="`/public/icons/home_icons_hover/icon${index + 1}_hover.png`" alt="">
                         </div>
                         <div class="textBox">{{ item.text }}</div>
                     </a>
