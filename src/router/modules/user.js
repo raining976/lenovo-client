@@ -125,6 +125,15 @@ export default [
                         },
                         component: () => import("@/views/user_center/views/order_list.vue")
                     },
+                    {
+                        path:'/my_address',
+                        name:'my_address',
+                        meta:{
+                            title:"我的地址",
+                            requiresAuth:true,
+                        },
+                        component: () => import("@/views/user_center/views/my_address.vue")
+                    }
                 ]
             }
 
