@@ -41,6 +41,7 @@ request.interceptors.response.use((response) => {
                 break;
             case 401:
                 msg = '未授权，请重新登录'
+                router.replace('/login')
                 break
             default:
                 msg = `未知错误(${status})!`
