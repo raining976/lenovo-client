@@ -55,11 +55,11 @@
                 <div class="btnContainer">
                     <div class="curAddress">
                         <div class="nameAndPhone">
-                            <span class="name">{{ addressList[activeIndex].name }}</span>
-                            <span class="phone">{{ addressList[activeIndex].phone }}</span>
+                            <span class="name">{{ addressList[activeIndex]?.name }}</span>
+                            <span class="phone">{{ addressList[activeIndex]?.phone }}</span>
                         </div>
                         <div class="dz">
-                            {{ addressList[activeIndex].dz }}
+                            {{ addressList[activeIndex]?.dz }}
                         </div>
                     </div>
                     <button class="submitOrderBtn">提交订单</button>
