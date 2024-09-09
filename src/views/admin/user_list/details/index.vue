@@ -5,13 +5,13 @@
         <el-col :span="12">
           <el-form-item label="用户ID">
             <el-input 
-            v-model="detail.userID" disabled></el-input>
+            v-model="detail.id" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="邮箱账号">
             <el-input v-model="detail.email" 
-              :disabled="!isAddNew"></el-input>
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -19,7 +19,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="昵称">
-            <el-input v-model="detail.name"></el-input>
+            <el-input v-model="detail.nickname"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -51,7 +51,7 @@
 
 <script setup>
   import { onMounted } from 'vue';
-
+  const { proxy } = getCurrentInstance()
 
   const router = useRouter();
 
@@ -69,9 +69,10 @@
   })
 
   const detail = ref({
-    userID: props.id,
+    id: props.id,
     email: '',
-    name: '',
+    password:'123456789',
+    nickname: '',
     sex: '1',
     balance: ''
   });
@@ -94,16 +95,14 @@
       alert('余额不能为空');
       return;
     }
-    router.replace('/admin/user_list'); // Return to the user list after saving
+    
+    
   };
 
   const cancel = () => {
     router.push('/admin/user_list'); // Return to the user list without saving
   };
 
-  const isAddNew = computed(
-    () => detail.value.email===''
-  );
 </script>
 
 <style scoped>
