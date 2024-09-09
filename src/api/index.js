@@ -2,3 +2,4 @@
 export * from "./modules/userAuth"
 export * from "./modules/user"
 export * from "./modules/good"
+export * from "./modules/admin"
