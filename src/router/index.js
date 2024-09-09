@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
 
     NProgress.start();
     if (to.meta.requiresAuth == true) {
-        const isLoggedIn = userStore.isLoggedIn()
+        const isLoggedIn = userStore.isLoggedIn
         if (!isLoggedIn) {
             // TODO: 保留当前的路由 
             return next('/login')
