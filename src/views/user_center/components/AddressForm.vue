@@ -15,7 +15,7 @@
         </el-form-item>
         <el-form-item class="btnBox">
             <el-button type="primary" @click="onSubmit(addressFormRef)">提交</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="resetForm(addressFormRef)">取消</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -78,7 +78,8 @@ const createAddress = () => {
     }
     proxy.$api.createAddress(formData).then(res => {
         if (res.code == 0) {
-            // addressFormRef.resetField()
+            resetForm(addressFormRef.value)
+            form.value.selected = []
             updateAddress()
         }
     })
@@ -100,6 +101,12 @@ const onSubmit = async (formEl) => {
     })
 
 }
+
+const resetForm = (formEl) => {
+  if (!formEl) return
+  formEl.resetFields()
+}
+
 </script>
 <style scoped>
 ::v-deep .el-cascader {

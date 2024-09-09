@@ -90,6 +90,16 @@ export default [
                 component: () => import ("@/views/search/index.vue")
             },
             {
+                path:'/order_submit',
+                name:'order_submit',
+                props:true,
+                meta:{
+                    title:"提交订单",
+                    requiresAuth: false,
+                },
+                component: () => import('@/views/order_submit/index.vue')
+            },
+            {
                 path:'/user_center',
                 redirect:'/user_info',
                 meta:{
