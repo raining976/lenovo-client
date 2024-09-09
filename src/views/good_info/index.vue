@@ -35,7 +35,7 @@
                 </div>
                 <div class="buyContainer">
                     <div class="buyButton">
-                        <button>立即购买</button>
+                        <button @click="buyNow">立即购买</button>
                     </div>
                 </div>
                 <div class="serviceContainer">
@@ -54,8 +54,9 @@
 import Skeleton from "./components/Skeleton.vue"
 import { CircleCheck } from "@element-plus/icons-vue"
 import handlerGoodConfig from "@/utils/handlerGoodConfig.js"
+import {useRouter} from 'vue-router'
+const router = useRouter()
 const { proxy } = getCurrentInstance();
-import router from "@/router"
 const props = defineProps({
     id: String
 })
@@ -101,6 +102,17 @@ const onClickedChoice = (i, c) => {
     // const targetId = originalConfigs.value[targetIndex].productCode
 }
 
+const buyNow = () => {
+    const orderInfo = {
+        productCode: curConfig.value.productCode,
+        count: buyCount.value,
+        price: curConfig.value.price
+    }
+    router.push({
+        path:'/order_submit',
+        query:orderInfo
+    })
+}
 </script>
 <style lang="scss" scoped>
 .h-productInfo {
