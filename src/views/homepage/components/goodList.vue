@@ -25,7 +25,7 @@
                         {{ item.brief }}
                     </div>
                     <div class="goodPrice">
-                        ¥{{ item.price}}
+                        ¥{{ item.price / 100}}
                     </div>
                 </div>
             </router-link>
