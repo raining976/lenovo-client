@@ -1,6 +1,6 @@
 import axios from "axios"
 import { errorNotice, successNotice } from "./notice"
-import { useUserStore } from '@/store'
+import { useUserStore , useAdminStore, useSiteStore} from '@/store'
 import router from "@/router"
 
 const request = axios.create({
@@ -13,10 +13,13 @@ const noRequiresTokenWhiteList = []
 
 request.interceptors.request.use((config) => {
     const userStore = useUserStore()
+    const adminStore = useAdminStore()
+    const siteStore = useSiteStore()
     // TODO: 判断当前请求是否在白名单中
     const isRequiresToken = true
+    const token = siteStore.isAdmin ? adminStore.token : userStore.token
     if (isRequiresToken) {
-        config.headers.Authorization = userStore.token
+        config.headers.Authorization = token
     }
 
     return config

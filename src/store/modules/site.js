@@ -4,13 +4,19 @@ export const useSiteStore = defineStore({
         role: 0, // 0 普通用户， 1 后台管理员
     }),
     getters:{
-      isAdmin: ()  => {
+      isAdmin(){
         return this.role == 1 ? true : false
       } 
     },
     actions: {
-        setRole: (role) =>{
+        setRole(role){
             this.role = role
+        },
+        setAdmin(){
+          this.role = 1
+        },
+        setUser(){
+          this.role = 0
         }
     }
 })

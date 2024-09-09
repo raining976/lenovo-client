@@ -1,8 +1,10 @@
 // router/index.js 
 import { createRouter, createWebHistory } from "vue-router";
 import NProgress from 'nprogress'; // progress bar
-
+import { useAdminStore, useUserStore, useSiteStore} from "@/store";
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
+
+
 
 const files = import.meta.glob('./modules/*.js', {
     eager: true,
@@ -45,20 +47,22 @@ const router = createRouter({
 
 // 路由前置守卫 主要用来进行鉴权
 router.beforeEach((to, from, next) => {
+    const userStore = useUserStore()
+    const adminStore = useAdminStore()
+
     NProgress.start();
     if (to.meta.requiresAuth == true) {
-        // TODO: 这里判断token是否过期
-        const isLoggedIn = true
+        const isLoggedIn = userStore.isLoggedIn()
         if (!isLoggedIn) {
             // TODO: 保留当前的路由 
             return next('/login')
         }
     }
 
-    console.log('to.path', to.path)
+    console.log('to.path', to.fullPath)
     if (to.meta.adminAuth) {
         // TODO: 判断管理员是否登录
-        const isAdminLoggedIn = true
+        const isAdminLoggedIn = adminStore.isAdminLoggedIn()
         if (!isAdminLoggedIn) {
             // TODO: 保留当前的路由
             return next("/adminLogin")
@@ -66,12 +70,20 @@ router.beforeEach((to, from, next) => {
 
     }
 
-
     next()
 })
 
 // 路由后置守卫 
 router.afterEach((to, from) => {
+    const siteStore = useSiteStore()
+    console.log('to.fullPath',to.fullPath)
+    if (to.fullPath.includes('admin')) {
+        // TODO: 鉴别是否是管理员
+        siteStore.setAdmin()        
+    }else{
+        siteStore.setUser()
+    }
+    console.log('siteStore.role',siteStore.role)
     NProgress.done();
     window.document.title = to.meta.title + " | " + import.meta.env.VITE_SITE_TITLE;
 
