@@ -3,7 +3,7 @@
     <el-form class="login-container" label-position="left" label-width="0px">
       <h3 class="login_title">管理员登录</h3>
       <el-form-item>
-        <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
+        <el-input type="text" v-model="loginForm.email" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
  
       <el-form-item>
@@ -21,12 +21,15 @@
 <script setup>
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import axios from 'axios'; 
+  import { useAdminStore } from '@/store';
+
+  const { proxy } = getCurrentInstance()
+  const adminStore = useAdminStore()
 
   // 定义响应式数据
   const loginForm = ref({
-    username: 'admin',
-    password: 'admin'
+    email: '',
+    password: ''
   });
   const responseResult = ref([]);
 
@@ -35,22 +38,15 @@
 
   // 登录方法
   const login = async () => {
-    if(loginForm.value.username=="admin"&&loginForm.value.password=="admin"){
-      router.replace({ path: '/admin' });
-    }
-    // try {
-    //   const successResponse = await axios.post('/login', {
-    //     username: loginForm.value.username,
-    //     password: loginForm.value.password
-    //   });
-
-    //   if (successResponse.data.code === 200) {
-    //     router.replace({ path: '/admin' });
-    //   }
-    // } catch (failResponse) {
-    //   // 处理错误响应
-    //   console.error('Login failed:', failResponse);
-    // }
+    proxy.$api.adminLogin(loginForm.value).then(res=>{
+      console.log('res=',res)
+      if(res.code===0){
+        adminStore.token=res.data;
+        console.log("token=",adminStore.token)
+        router.replace('/admin')
+      }
+    })
+    
   };
   
 </script>

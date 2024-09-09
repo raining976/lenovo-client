@@ -183,19 +183,45 @@
 
   const handleDelete = async (row) => { //向后端发起请求
     console.log('删除:', row);
-    Pagination.value.total--;
-    try {
-      // 发送 DELETE 请求到后端
-      //await axios.delete(`/api/items/${row.id}`);
-      // 从数组中删除项
-      const index = tableData.value.findIndex(item => item.id === row.id);
-      if (index !== -1) {
-        tableData.value.splice(index, 1);
+    ElMessageBox.confirm(
+      '确认删除？',
+      '警告！',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'danger',
       }
-    } catch (error) {
-      console.error('删除失败:', error);
-    }
+    )
+      .then(() => {
+        console.log('删除:', row);
+        ElMessage({
+          type: 'success',
+          message: '删除成功！',
+        })
+        Pagination.value.total--;
+        try {
+          // 发送 DELETE 请求到后端
+          //await axios.delete(`/api/items/${row.id}`);
+          // 从数组中删除项
+          const index = tableData.value.findIndex(item => item.id === row.id);
+          if (index !== -1) {
+            tableData.value.splice(index, 1);
+          }
+        } catch (error) {
+          console.error('删除失败:', error);
+        }
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '取消删除。',
+        })
+      })
+
+
+   
   };
+
   const addUser=()=>{
     console.log('新增用户')
     const newID = getDataLength()+1;
