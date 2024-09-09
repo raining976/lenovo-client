@@ -17,7 +17,7 @@
 
     <div class="tableBody">
       <div class="toolbar">
-        <el-button type="primary" :icon="CirclePlus" @click="addUser">新增用户</el-button>
+        <el-button type="primary" :icon="CirclePlus" @click="isAddNewUserDialogVisible = true">新增用户</el-button>
         <el-button type="danger" :icon="Delete" @click="batchDeletion">批量删除</el-button>
       </div>
 
@@ -30,9 +30,9 @@
           :cell-style="{ 'text-align': 'center' }">
 
           <el-table-column type="selection" width="55" />
-          <el-table-column prop="userID" label="用户ID" />
+          <el-table-column prop="id" label="用户ID" />
           <el-table-column prop="email" label="邮箱账号" />
-          <el-table-column prop="name" label="昵称" />
+          <el-table-column prop="nickname" label="昵称" />
           <el-table-column prop="sex" label="性别" :formatter="formatSex" />
           <el-table-column prop="balance" label="余额" />
           <el-table-column label="操作">
@@ -53,6 +53,26 @@
 
       </div>
     </div>
+
+    <div class="addnewDialog">
+      <el-dialog v-model="isAddNewUserDialogVisible" title="新用户" width="500px" :before-close="dialogClose">
+        <el-form :model="newUser">
+          <el-form-item label="邮箱账号" label-width="100px">
+            <el-input clearable v-model="newUser.email" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="密码" label-width="100px">
+            <el-input clearable v-model="newUser.password" autocomplete="off" />
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="dialogClose">取消</el-button>
+            <el-button type="primary" @click="saveNewUser">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
+
   </div>
 
 
@@ -60,14 +80,47 @@
 
 <script setup>
   import { Search, CirclePlus, Delete } from '@element-plus/icons-vue'
+  import { onMounted } from 'vue';
   
   const { proxy } = getCurrentInstance()
 
   const router = useRouter();
 
+  const isAddNewUserDialogVisible = ref(false);
+
   const searchInput = ref({
     email: '',
   });
+
+  const newUser = ref({
+    email:'',
+    password:''
+  })
+
+  const dialogClose = () => {
+    newUser.value.email=''
+    newUser.value.password=''
+    isAddNewUserDialogVisible.value=false
+  }
+
+  const saveNewUser = () =>{
+    if(newUser.value.email===''||newUser.value.password===''){
+      alert('邮箱或密码不能为空！');
+      return;
+    }
+    else if(newUser.value.password.length<=6){
+      alert('密码需超过六位数！');
+      return;
+    }
+    proxy.$api.adminAddNewUser(newUser.value).then(res=>{
+      if(res.code===0){
+        newUser.value.email=''
+        newUser.value.password=''
+        isAddNewUserDialogVisible.value=false;
+        getData();
+      }
+    })
+  }
 
   const formatSex = (row, column, cellValue) => {
     switch (cellValue) {
@@ -80,7 +133,9 @@
     }
   }
 
-
+  onMounted(()=>{
+    getData()
+  })
 
   const Dataset = [  //假数据
     {
@@ -145,21 +200,14 @@
     total: getDataLength(), // 总条数
   })
 
-  const getData=(currentpage,pagesize) => { //向后端请求数据
-    try {
-      // 发送 GET 请求
-  //      const response = await axios.get(endpoint);
-      // 返回响应数据
-  //      return response.data;
-      console.log("getdata");
-      return Dataset.slice((currentpage - 1) * pagesize, currentpage * pagesize)
-    } catch (error) {
-      // 捕获和处理错误
-      console.error('请求数据失败:', error);
-      throw error; // 重新抛出错误以便调用者处理
-    }
+  const tableData = ref([])
+  const getData= () => { //向后端请求数据
+    proxy.$api.adminGetUserList().then(res=>{
+      tableData.value=res.data
+      Pagination.value.total=res.data.length
+    })
   }
-  const tableData = ref(getData(Pagination.value.currentPage,Pagination.value.pageSize))
+  
 
   const emailSearch = () => {
     console.log('查找:',searchInput.value.email)
@@ -194,22 +242,16 @@
     )
       .then(() => {
         console.log('删除:', row);
+        const deleUser={userId:row.id};
+        proxy.$api.adminDeleteUser(deleUser).then(res=>{
+          if(res.code===0){
+            getData();
+          }
+        })
         ElMessage({
           type: 'success',
           message: '删除成功！',
         })
-        Pagination.value.total--;
-        try {
-          // 发送 DELETE 请求到后端
-          //await axios.delete(`/api/items/${row.id}`);
-          // 从数组中删除项
-          const index = tableData.value.findIndex(item => item.id === row.id);
-          if (index !== -1) {
-            tableData.value.splice(index, 1);
-          }
-        } catch (error) {
-          console.error('删除失败:', error);
-        }
       })
       .catch(() => {
         ElMessage({
@@ -222,18 +264,7 @@
    
   };
 
-  const addUser=()=>{
-    console.log('新增用户')
-    const newID = getDataLength()+1;
-    const newuser={
-      userID: 'lenovo' + newID,
-      email: '',
-      name: '',
-      sex: '1',
-      balance: '￥1000.00'
-    };
-    router.push(`/admin/userInfo/${newuser.userID}`)
-  }
+
 
   //选择+批量删除
   const selectedRows=ref([])
@@ -249,26 +280,10 @@
     }
 
     // 获取要删除的项邮箱
-    const idsToDelete = selectedRows.value.map(row => row.userID);
+    const idsToDelete = selectedRows.value.map(row => row.id);
     console.log(idsToDelete)
 
-    try {
-      // 发起删除请求
-    //  await axios.post('/api/delete-items', { ids: idsToDelete });
-      console.log('删除成功');
-
-      // 从表格数据中移除已删除的项
-  //     tableData.value = tableData.value.filter(
-  //       item => !idsToDelete.includes(item.id)
-  //     );
-  // //    tableData.value = getData(1,Pagination.value.pageSize);
-  //     //改变分页器总数
-  //     Pagination.value.total -= idsToDelete.length
-  //     // 清空选中的行
-  //     selectedRows.value = [];
-    } catch (error) {
-      console.error('删除失败:', error);
-    }
+    
   }
 
 
