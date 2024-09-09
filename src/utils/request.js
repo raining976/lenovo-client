@@ -63,7 +63,7 @@ function get(url, params, isNotice = false) {
 }
 function post(url, data, isNotice = false) {
     return request.post(url, data).then(res => {
-        console.log('test', isNotice)
+        // console.log('test', isNotice)
         if (isNotice) {
             successNotice(res.msg)
         }

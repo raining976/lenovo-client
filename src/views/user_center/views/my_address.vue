@@ -1,12 +1,17 @@
 <template>
     <div class="myAddressContainer">
-
         <div class="addressFormContainer">
-            <AddressForm />
+            <AddressForm @updateAddress="updateAddress" />
         </div>
         <el-divider />
         <div class="addressList">
-            地址列表
+            <el-descriptions class="addressItem"  :column="column" :title="`地址 ${index + 1}`" v-for="(address, index) in addressList" :key="index" v-show="address.name">
+                <el-descriptions-item label="姓名">{{ address.name }}</el-descriptions-item>
+                <el-descriptions-item label="电话">{{ address.phone }}</el-descriptions-item>
+                <el-descriptions-item label="地址">
+                    {{ address.dz }}
+                </el-descriptions-item>
+            </el-descriptions>
         </div>
     </div>
 
@@ -17,7 +22,9 @@ import { useUserStore } from "@/store"
 const { proxy } = getCurrentInstance()
 const userStore = useUserStore()
 
-const addressForm = ref({})
+
+const addressList = ref([])
+const column = ref(1)
 
 onMounted(() => {
     updateAddress()
@@ -29,17 +36,22 @@ const updateAddress = () => {
     }
     proxy.$api.getAddress(form).then(res => {
         console.log('res', res)
+        addressList.value = res.data
     })
 }
 
-const createAddress = () => {
-    proxy.$api.createAddress(addressForm.value).then(res => {
-        console.log('res', res)
-    })
-}
+
 
 
 </script>
 
 <style lang="scss" scoped>
+.addressList{
+    display: flex;
+    flex-wrap: wrap;
+    .addressItem{
+        min-width: 350px;
+    }
+}
+
 </style>
