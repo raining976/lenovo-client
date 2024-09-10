@@ -1,4 +1,4 @@
-import { get } from "@/utils/request"
+import { get, post } from "@/utils/request"
 
 export const getHomeGoods = () => get('/home/')
 export const getProductInfo = (data) => get('/product/',data)

@@ -51,13 +51,13 @@ onMounted(() => {
     overflow: hidden;
   }
 
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
+  .el-carousel__item {
+    background-color: #fff;
   }
 
-  .el-carousel__item:nth-child(2n + 1) {
-    background-color: #d3dce6;
-  }
+  // .el-carousel__item:nth-child(2n + 1) {
+  //   background-color: #d3dce6;
+  // }
 
   .bgBox {
     position: relative;
