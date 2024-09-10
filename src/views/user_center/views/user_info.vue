@@ -1,8 +1,10 @@
 <template>
     <el-form v-model="formData" label-width="auto" style="max-width: 400px">
         <el-form-item label="头像" class="avatar">
-            <el-upload :http-request="uploadAvatar" name="avatar" :limit="1">
-                <el-avatar :size="50" :src="`https://lenovo.imbai.cn${formData.avatar}`" />
+            <el-upload :http-request="uploadAvatar" name="avatar" :limit="1" :show-file-list="false">
+                <el-avatar
+                @error="handlerAvatarError"
+                :size="50" :src="avatarUrl" />
             </el-upload>
         </el-form-item>
         <el-form-item label="邮箱">
@@ -46,7 +48,8 @@ const formData = ref({
     nickname: "",
     gender: ""
 })
-onMounted(async() => {
+const avatarUrl = ref('')
+onMounted(async () => {
     updateUserInfo()
 
 })
@@ -55,6 +58,7 @@ const updateUserInfo = () => {
     for (let i in userStore.userInfo) {
         formData.value[i] = userStore.userInfo[i]
     }
+    avatarUrl.value = `https://lenovo.imbai.cn${formData.avatar}`
 }
 
 const { proxy } = getCurrentInstance()
@@ -87,14 +91,19 @@ const onSubmit = () => {
     console.log('submit!')
 }
 
-const uploadAvatar = (f)=>{
+const uploadAvatar = (f) => {
     const formData = new FormData()
     formData.append('avatar', f.file)
-    proxy.$api.uploadAvatar(formData).then(res=>{
-        if(res.code == 0){
+    proxy.$api.uploadAvatar(formData).then(res => {
+        if (res.code == 0) {
             getUserInfo()
         }
     })
+}
+
+
+const handlerAvatarError = ()=>{
+    avatarUrl.value = '/defaultAvatar.jpg'
 }
 </script>
 
