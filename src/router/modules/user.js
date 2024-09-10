@@ -99,6 +99,16 @@ export default [
                 },
                 component: () => import('@/views/order_submit/index.vue')
             },
+            {   
+                path:'/payment_success/:id',
+                name:"payment_success",
+                props: true,
+                meta:{
+                    title:"支付成功",
+                    requiresAuth: true,
+                },
+                component: () => import("@/views/order_submit/paymentSuccess.vue")
+            },
             {
                 path:'/user_center',
                 redirect:'/user_info',

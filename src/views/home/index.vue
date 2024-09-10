@@ -17,7 +17,7 @@
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const isShow = computed(() => {
-  return !(route.name =='login' || route.name == 'register' || route.name == '404page')
+  return !(route.name =='login' || route.name == 'register' || route.name == '404page' || route.name == 'payment_success')
 })
 </script>
 
