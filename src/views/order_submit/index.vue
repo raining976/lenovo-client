@@ -19,6 +19,7 @@
                 <div class="payContainer">
                     <div class="title">支付方式</div>
                     <el-tag type="success">在线支付</el-tag>
+
                 </div>
                 <div class="goodContainer">
                     <div class="title">商品详情</div>
@@ -62,7 +63,11 @@
                             {{ addressList[activeIndex]?.dz }}
                         </div>
                     </div>
-                    <button class="submitOrderBtn">提交订单</button>
+                    <div class="btnBox">
+                        <span class="balanceLabel">您的余额:</span>
+                        <span class="balanceValue">¥{{ (userStore.userInfo.balance / 100).toFixed(2) }}</span>
+                        <button class="submitOrderBtn" @click="createOrder">立即购买</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,6 +113,31 @@ const getCurProductInfo = () => {
     })
 }
 
+
+const createOrder = () => {
+    const form = {
+        userId: userStore.userInfo.id,
+        name: addressList.value[activeIndex.value].name,
+        phone: addressList.value[activeIndex.value].phone,
+        dz: addressList.value[activeIndex.value].dz,
+        items:[
+            {
+                productCode: route.query.productCode,
+                count: route.query.count,
+                price: route.query.price
+            }
+        ],
+        payment: payment.value
+
+    }
+    proxy.$api.createOrder(form).then(res=>{
+        console.log('res',res)
+        if(res.code == 0){
+            router.push(`/payment_success/${res.data}`)
+        }
+    })
+
+}
 
 </script>
 <style lang="scss" scoped>
@@ -171,6 +201,7 @@ const getCurProductInfo = () => {
 
         .payContainer {
             height: 100px;
+
         }
 
         .goodContainer {
@@ -270,6 +301,17 @@ const getCurProductInfo = () => {
             width: 100%;
             display: flex;
             justify-content: space-between;
+
+            .balanceLabel {
+                font-size: 14px;
+                margin: 0 20px;
+            }
+
+            .balanceValue {
+                font-size: 14px;
+                color: #ea3323;
+                margin-right: 50px;
+            }
 
             .curAddress {
                 font-size: 14px;
