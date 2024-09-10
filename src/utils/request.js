@@ -1,6 +1,6 @@
 import axios from "axios"
 import { errorNotice, successNotice } from "./notice"
-import { useUserStore , useAdminStore, useSiteStore} from '@/store'
+import { useUserStore, useAdminStore, useSiteStore } from '@/store'
 import router from "@/router"
 
 const request = axios.create({
@@ -35,6 +35,7 @@ request.interceptors.response.use((response) => {
     return response.data
 },
     (error) => {
+        const siteStore = useSiteStore()
         console.error('error', error)
         let msg = ''
         const status = error.response?.status
@@ -44,22 +45,29 @@ request.interceptors.response.use((response) => {
                 break;
             case 401:
                 msg = '未授权，请重新登录'
-                router.replace('/login')
+                errorNotice(msg)
+                if(!siteStore.isAdmin){
+                    router.replace('/login')
+                }else {
+                    router.replace('/adminLogin')
+                }
                 break
             default:
                 msg = `未知错误(${status})!`
+                errorNotice(msg)
+                router.push('/404')
                 break
         }
-        // TODO: 错误处理提示
-        errorNotice(msg)
+        // errorNotice(msg)
         return Promise.reject(error);
     })
 
-
 function get(url, params, isNotice = false) {
     return request.get(url, { params }).then(res => {
-        if (isNotice) {
+        if (isNotice && res.code == 0) {
             successNotice(res.msg)
+        } else if (isNotice && res.code == 1) {
+            ErrorNotice(res.msg)
         }
         return res
     })
@@ -67,8 +75,10 @@ function get(url, params, isNotice = false) {
 function post(url, data, isNotice = false) {
     return request.post(url, data).then(res => {
         // console.log('test', isNotice)
-        if (isNotice) {
+        if (isNotice && res.code == 0) {
             successNotice(res.msg)
+        } else if (isNotice && res.code == 1) {
+            ErrorNotice(res.msg)
         }
         return res
     })
