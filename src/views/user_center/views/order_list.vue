@@ -4,7 +4,7 @@
       <el-table-column label="订单id" prop="id" width="80px"></el-table-column>
       <el-table-column label="订单状态" prop="status" width="80px">
         <template #default="scope">
-          <el-tag :type="orderStatus[scope.row.status].type">{{ orderStatus[scope.row.status].label }}</el-tag>
+          <el-tag :type="orderStatus[scope.row.status-1].type">{{ orderStatus[scope.row.status-1].label }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="商品详情" width="400">
@@ -18,6 +18,7 @@
                 <div class="name">{{ good.name }}</div>
                 <div class="brief">{{ good.brief }}</div>
               </div>
+              <div class="countBox">x{{ good.count }}</div>
             </li>
           </ul>
         </template>
@@ -28,7 +29,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="支付金额" prop="payment"></el-table-column>
+      <el-table-column label="支付金额" prop="payment">
+        <template #default="scope">
+          ¥ {{(scope.row.payment / 100).toFixed(2) }}
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pageContainer">
       <el-pagination background layout="prev, pager, next" :page-size="pageSize" :current-page="currentPage"
@@ -114,6 +119,10 @@ const curPageChange = (v) => {
 .goodContainer {
   .good {
     display: flex;
+    align-items: center;
+    .countBox{
+      font-size: 12px;
+    }
   }
 
   .imgBox {
