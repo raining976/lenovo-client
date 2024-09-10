@@ -18,7 +18,7 @@ import AsideMenu from './components/AsideMenu.vue';
     min-height: 500px;
 
     .userInfoMain {
-        padding: 40px;
+        padding: 10px 30px;
     }
 }
 </style>

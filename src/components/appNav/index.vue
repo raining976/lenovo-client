@@ -26,8 +26,8 @@
                     </span>
                     <template #dropdown>
                         <el-dropdown-menu class="navMenu" aria-hidden="false">
-                            <el-dropdown-item><router-link to="/user_center">个人中心</router-link></el-dropdown-item>
-                            <el-dropdown-item>我的订单</el-dropdown-item>
+                            <router-link to="/user_center"><el-dropdown-item>个人中心</el-dropdown-item></router-link>
+                            <router-link to="orders"><el-dropdown-item>我的订单</el-dropdown-item></router-link>
                             <el-dropdown-item divided @click="userStore.logout()">退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
