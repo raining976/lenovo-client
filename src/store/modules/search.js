@@ -10,6 +10,8 @@ export const useSearchStore = defineStore({
             currentPage: 1, // 第几页
             categoryId: null, // 分类id 一共七类
             sorter: 0, // 0 不排序 1 升序 2 是降序
+            startPrice: null,
+            endPrice: null,
         },
         totalItems: 0,
         searchRes: null,

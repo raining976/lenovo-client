@@ -14,6 +14,18 @@
                 <div class="otherSetting">
                     <div class="title">其他选项</div>
                     <ul class="settingList">
+                        <div class="priceSortContainer">
+                            <el-select v-model="searchStore.searchForm.sorter" clearable  placeholder="按照价格排序"  style="width: 150px; margin-right:20px;">
+                                <el-option v-for="(item,i) in priceSorters" :key='i' :label="item.label"
+                                    :value="item.value" />
+                            </el-select>
+                        </div>
+                        <div class="priceRangeContainer">
+                            <el-tag type="info" style="margin-right: 20px;">价格区间</el-tag>
+                            <el-input-number :min="0" v-model="searchStore.searchForm.startPrice" size="small" /> -
+                            <el-input-number :min="0" v-model="searchStore.searchForm.endPrice" size="small" />
+                            <el-button @click="searchStore.search()">确定</el-button>
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -30,18 +42,15 @@
                             <div class="textBox">
                                 <div class="title">{{ good.name }}</div>
                                 <div class="brief">{{ good.brief }}</div>
-                                <div class="price">¥{{ good.price / 100 }}</div>
+                                <div class="price">¥{{ (good.price / 100 ).toFixed(2)}}</div>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="pageContainer" v-show="!searchStore.isEmpty">
-                    <el-pagination background layout="prev,pager,next"
-                        :page-size="16" :current-page="searchStore.searchForm.currentPage"
-                        :total="searchStore.totalItems"
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        />
+                    <el-pagination background layout="prev,pager,next" :page-size="16"
+                        :current-page="searchStore.searchForm.currentPage" :total="searchStore.totalItems"
+                        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
                 </div>
                 <div class="emptyBox" v-show="searchStore.isEmpty">
                     <el-empty :image-size="200" />
@@ -64,7 +73,26 @@ onMounted(() => {
     search()
 })
 
+const priceSorters = ref([
+    {
+        label:'不排序',
+        value: 0,
+    },
+    {
+        label:'升序',
+        value: 1,
+    },
+    {
+        label:'降序',
+        value: 2,
+    },
+])
+
 const sortItems = ref([
+    {
+        categoryId: null,
+        name: '全部'
+    },
     {
         categoryId: 3,
         name: 'Lenovo 电脑'
@@ -123,9 +151,9 @@ const handleCurrentChange = (val) => {
     search()
 }
 
-const changeId = (id) =>{
+const changeId = (id) => {
     searchStore.searchForm.categoryId = id;
-    console.log('searchStore.searchForm',searchStore.searchForm)
+    console.log('searchStore.searchForm', searchStore.searchForm)
     search()
 }
 
@@ -161,6 +189,19 @@ const changeId = (id) =>{
 
         }
 
+        .settingList {
+            height: 50px;
+            display: flex;
+            align-items: center;
+
+            .priceRangeContainer {
+                .el-button {
+                    margin-left: 20px;
+                }
+            }
+
+        }
+
         .sortList {
             display: flex;
             flex-wrap: wrap;
@@ -178,8 +219,8 @@ const changeId = (id) =>{
                     cursor: pointer;
                 }
 
-                &:active span {
-                    color: #b96760;
+                &.active span {
+                    color: #e2231a;
                     font-weight: bold;
                 }
             }
