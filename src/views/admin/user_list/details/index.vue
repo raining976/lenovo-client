@@ -65,10 +65,10 @@
     console.log('user id:',props.id)
     // 发起请求 根据该id 获取用户详细信息
     // 拿到信息后存到dtail对象
-    const editUser = {userId:props.id}
+    const editUser = {userId:props.id,page:1,limit:10}
     proxy.$api.adminGetUserList(editUser).then(res=>{
       if(res.code===0){
-        detail.value=res.data[0]
+        detail.value=res.data.records[0]
         console.log(detail.value)
       }
     })
