@@ -14,7 +14,7 @@ import AsideMenu from './components/AsideMenu.vue';
 </script>
 <style lang="scss" scoped>
 .userContainer {
-    height: calc(100vh - 2 * $navHeight);
+    height: calc(100vh -  $navHeight);
     min-height: 500px;
 
     .userInfoMain {
