@@ -133,11 +133,19 @@ const createOrder = () => {
     proxy.$api.createOrder(form).then(res=>{
         console.log('res',res)
         if(res.code == 0){
+            updateUserInfo()
             router.push(`/payment_success/${res.data}`)
         }
     })
 
 }
+
+const updateUserInfo = () => {
+    proxy.$api.getUserInfo().then(res => {
+        userStore.setUserInfo(res.data)
+    })
+}
+
 
 </script>
 <style lang="scss" scoped>
