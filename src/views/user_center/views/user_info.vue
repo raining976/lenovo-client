@@ -2,9 +2,7 @@
     <el-form v-model="formData" label-width="auto" style="max-width: 400px">
         <el-form-item label="头像" class="avatar">
             <el-upload :http-request="uploadAvatar" name="avatar" :limit="1" :show-file-list="false">
-                <el-avatar
-                @error="handlerAvatarError"
-                :size="50" :src="avatarUrl" />
+                <el-avatar @error="handlerAvatarError" :size="50" :src="avatarUrl" />
             </el-upload>
         </el-form-item>
         <el-form-item label="邮箱">
@@ -51,7 +49,8 @@ const formData = ref({
 const avatarUrl = ref('')
 onMounted(async () => {
     updateUserInfo()
-
+    avatarUrl.value = `https://lenovo.imbai.cn${userStore.userInfo.avatar}`
+    console.log('avatarUrl.value',avatarUrl.value)
 })
 
 const updateUserInfo = () => {
@@ -102,7 +101,7 @@ const uploadAvatar = (f) => {
 }
 
 
-const handlerAvatarError = ()=>{
+const handlerAvatarError = () => {
     avatarUrl.value = '/defaultAvatar.jpg'
 }
 </script>
