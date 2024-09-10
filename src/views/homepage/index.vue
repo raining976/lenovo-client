@@ -3,7 +3,6 @@
         <myCarousel/>
         <iconList/>
         <div class="h">
-            
             <goodList/>
         </div>
     </div>
