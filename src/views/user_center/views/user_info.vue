@@ -1,15 +1,17 @@
 <template>
     <el-form v-model="formData" label-width="auto" style="max-width: 400px">
         <el-form-item label="头像" class="avatar">
-            <el-avatar :size="50" :src="formData.avatar" />
+            <el-upload :http-request="uploadAvatar" name="avatar" :limit="1">
+                <el-avatar :size="50" :src="`https://lenovo.imbai.cn${formData.avatar}`" />
+            </el-upload>
         </el-form-item>
         <el-form-item label="邮箱">
             <span>{{ formData.email }}</span>
         </el-form-item>
         <el-form-item label="账户余额">
-            <span>¥{{ formData.balance }}</span>
+            <span>¥{{ (formData.balance / 100).toFixed(2) }}</span>
         </el-form-item>
-        <el-form-item label="昵称" width="200px" >
+        <el-form-item label="昵称" width="200px">
             <el-input v-show="isEdit" v-model="formData.nickname" />
             <span v-show="!isEdit">{{ userStore.userInfo.nickname }}</span>
         </el-form-item>
@@ -30,11 +32,11 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted} from 'vue'
+import { getCurrentInstance, onMounted } from 'vue'
 import { useUserStore } from "@/store"
 const userStore = useUserStore()
 const isEdit = ref(false)
-const sexList = ref(['未知','男','女'])
+const sexList = ref(['未知', '男', '女'])
 const formData = ref({
     avatar: "",
     balance: 1000000,
@@ -44,12 +46,12 @@ const formData = ref({
     nickname: "",
     gender: ""
 })
-onMounted(() => {
+onMounted(async() => {
     updateUserInfo()
 
 })
 
-const updateUserInfo = () =>{
+const updateUserInfo = () => {
     for (let i in userStore.userInfo) {
         formData.value[i] = userStore.userInfo[i]
     }
@@ -57,21 +59,23 @@ const updateUserInfo = () =>{
 
 const { proxy } = getCurrentInstance()
 
-const changeInfo = () =>{
+const changeInfo = () => {
     const form = {
         id: formData.value.id,
         nickname: formData.value.nickname,
         gender: formData.value.gender
     }
-    proxy.$api.changeUserInfo(form).then(res=>{
-        if(res.code == 0){
+    proxy.$api.changeUserInfo(form).then(res => {
+        if (res.code == 0) {
             getUserInfo()
         }
     })
 }
 
-const getUserInfo = ()=>{
+const getUserInfo = () => {
     proxy.$api.getUserInfo().then(res => {
+        // const info = res.data
+        // info.avatar ="https://lenovo.imbai.cn" + info.avatar
         userStore.setUserInfo(res.data)
         updateUserInfo()
         isEdit.value = false
@@ -82,14 +86,24 @@ const onSubmit = () => {
     changeInfo()
     console.log('submit!')
 }
+
+const uploadAvatar = (f)=>{
+    const formData = new FormData()
+    formData.append('avatar', f.file)
+    proxy.$api.uploadAvatar(formData).then(res=>{
+        if(res.code == 0){
+            getUserInfo()
+        }
+    })
+}
 </script>
 
 <style scoped>
-.btnBox{
+.btnBox {
     padding: 0 30px;
 }
 
-.avatar ::v-deep .el-form-item__label-wrap{
+.avatar ::v-deep .el-form-item__label-wrap {
     align-items: center;
 }
 </style>
