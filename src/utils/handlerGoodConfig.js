@@ -5,7 +5,6 @@ const handlerGoodConfig = (id, config) => {
             choices: new Set()
         }
     })
-
     config.forEach(item => addSet(allConfigs, item.value))
     const cur = findCurConfig(id, config)
     const curValue = cur.value.map(item => {
@@ -14,7 +13,7 @@ const handlerGoodConfig = (id, config) => {
     return { cur, allConfigs, curValue}
 }
 const addSet = (configs, arr) => {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < configs.length; i++) {
         configs[i].choices.add(Object.values(arr[i])[0])
     }
 }
