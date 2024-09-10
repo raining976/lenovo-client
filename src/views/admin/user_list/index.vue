@@ -33,7 +33,7 @@
           <el-table-column prop="id" label="用户ID" />
           <el-table-column prop="email" label="邮箱账号" />
           <el-table-column prop="nickname" label="昵称" />
-          <el-table-column prop="sex" label="性别" :formatter="formatSex" />
+          <el-table-column prop="gender" label="性别" :formatter="formatSex" />
           <el-table-column prop="balance" label="余额" />
           <el-table-column label="操作">
             <template #default="scope">
@@ -94,12 +94,12 @@
 
   const newUser = ref({
     email:'',
-    password:''
+    password:'123456789'
   })
 
   const dialogClose = () => {
     newUser.value.email=''
-    newUser.value.password=''
+    // newUser.value.password=''
     isAddNewUserDialogVisible.value=false
   }
 
@@ -115,7 +115,7 @@
     proxy.$api.adminAddNewUser(newUser.value).then(res=>{
       if(res.code===0){
         newUser.value.email=''
-        newUser.value.password=''
+        // newUser.value.password=''
         isAddNewUserDialogVisible.value=false;
         getData();
       }
@@ -124,18 +124,16 @@
 
   const formatSex = (row, column, cellValue) => {
     switch (cellValue) {
-      case '1':
+      case 1:
         return '男'
-      case '2':
+      case 2:
         return '女'
       default:
         return '未知'
     }
   }
 
-  onMounted(()=>{
-    getData()
-  })
+  
 
   const Dataset = [  //假数据
     {
@@ -190,43 +188,45 @@
 
   ]
 
-  const getDataLength=()=>{  //向后端请求获取数据的总数
-    return Dataset.length;
-  }
-
   const Pagination= ref({  //分页器
     currentPage: 1, // 当前页
     pageSize: 10, // 每页显示条数
-    total: getDataLength(), // 总条数
+    total: 10, // 总条数
   })
-
+  onMounted(()=>{
+    getData()
+  })
   const tableData = ref([])
   const getData= () => { //向后端请求数据
-    proxy.$api.adminGetUserList().then(res=>{
-      tableData.value=res.data
-      Pagination.value.total=res.data.length
+    const request = {email:searchInput.value.email,page:Pagination.value.currentPage,limit:Pagination.value.pageSize}
+    console.log(request)
+    proxy.$api.adminGetUserList(request).then(res=>{
+      if(res.code===0){
+        tableData.value=res.data.records
+        Pagination.value.total=res.data.total 
+      }
     })
   }
   
 
   const emailSearch = () => {
-    console.log('查找:',searchInput.value.email)
+    getData();
   }
 
 
   const handleSizeChange = (val) => { //页数改变时
     Pagination.value.pageSize=val;
     Pagination.value.currentPage=1;
-    tableData.value=getData(1,val);
+    getData();
   }
                    
   const handleCurrentChange = (val) => { //当前页数改变时
     Pagination.value.currentPage=val
-    tableData.value=getData(val,Pagination.value.pageSize);
+    getData();
   }
 
   const handleEdit = (row) => {
-    router.replace(`/admin/userInfo/${row.userID}`)
+    router.push(`/admin/userInfo/${row.id}`)
   }
 
   const handleDelete = async (row) => { //向后端发起请求
@@ -273,7 +273,7 @@
     selectedRows.value=val;
   }
 
-  const batchDeletion= async()=>{
+  const batchDeletion = async () => {
     if (selectedRows.value.length === 0) {
       alert('请先选择要删除的项');
       return;
@@ -281,10 +281,51 @@
 
     // 获取要删除的项邮箱
     const idsToDelete = selectedRows.value.map(row => row.id);
-    console.log(idsToDelete)
 
-    
-  }
+    try {
+      await ElMessageBox.confirm(
+        '确认删除？',
+        '警告！',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'danger',
+        }
+      );
+
+      // 创建删除操作的 Promise 数组
+      const deletePromises = idsToDelete.map(id => {
+        const deleUser = { userId: id };
+        return proxy.$api.adminDeleteUser(deleUser);
+      });
+
+      // 等待所有删除操作完成
+      await Promise.all(deletePromises);
+
+      // 获取数据
+      await getData();
+
+      // 显示成功消息
+      ElMessage({
+        type: 'success',
+        message: '删除成功！',
+      });
+    } catch (error) {
+      if (error !== 'cancel') {
+        // 处理删除失败的情况
+        ElMessage({
+          type: 'error',
+          message: '删除失败。',
+        });
+      } else {
+        // 处理取消删除的情况
+        ElMessage({
+          type: 'info',
+          message: '取消删除。',
+        });
+      }
+    }
+  };
 
 
 </script>

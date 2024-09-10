@@ -24,10 +24,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="性别">
-            <el-select v-model="detail.sex" placeholder="请选择性别">
-              <el-option label="男" value="1"></el-option>
-              <el-option label="女" value="2"></el-option>
-              <el-option label="未知" value="0"></el-option>
+            <el-select v-model="detail.gender" placeholder="请选择性别">
+              <el-option label="男" :value=1></el-option>
+              <el-option label="女" :value=2></el-option>
+              <el-option label="未知" :value=0></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -62,18 +62,24 @@
   
 
   onMounted(()=>{
-
     console.log('user id:',props.id)
     // 发起请求 根据该id 获取用户详细信息
     // 拿到信息后存到dtail对象
+    const editUser = {userId:props.id}
+    proxy.$api.adminGetUserList(editUser).then(res=>{
+      if(res.code===0){
+        detail.value=res.data[0]
+        console.log(detail.value)
+      }
+    })
   })
 
   const detail = ref({
     id: props.id,
     email: '',
-    password:'123456789',
+    password:'',
     nickname: '',
-    sex: '1',
+    gender: null,
     balance: ''
   });
 
@@ -95,12 +101,23 @@
       alert('余额不能为空');
       return;
     }
-    
+    const UpdateUser = {
+      gender: saveVal.gender,
+      nickname: saveVal.nickname,
+      email: saveVal.email,
+      balance: saveVal.balance,
+      userId:saveVal.id 
+    }
+    proxy.$api.adminUpdateUser(UpdateUser).then(res=>{
+      if(res.code===0){
+        router.replace('/admin/user_list');
+      }
+    })
     
   };
 
   const cancel = () => {
-    router.push('/admin/user_list'); // Return to the user list without saving
+    router.replace('/admin/user_list'); // Return to the user list without saving
   };
 
 </script>
