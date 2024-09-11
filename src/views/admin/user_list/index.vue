@@ -105,11 +105,17 @@
 
   const saveNewUser = () =>{
     if(newUser.value.email===''||newUser.value.password===''){
-      alert('邮箱或密码不能为空！');
+      ElMessage({
+          type: 'warning',
+          message: '邮箱或密码不能为空！',
+      })
       return;
     }
     else if(newUser.value.password.length<=6){
-      alert('密码需超过六位数！');
+      ElMessage({
+          type: 'warning',
+          message: '密码需超过六位数！',
+      })
       return;
     }
     proxy.$api.adminAddNewUser(newUser.value).then(res=>{
@@ -117,6 +123,10 @@
         newUser.value.email=''
         // newUser.value.password=''
         isAddNewUserDialogVisible.value=false;
+        ElMessage({
+          type: 'success',
+          message: '保存成功！',
+        });
         getData();
       }
     })
@@ -133,61 +143,6 @@
     }
   }
 
-  
-
-  const Dataset = [  //假数据
-    {
-      userID: 'lenovo1',
-      email: '13664@qq.com',
-      name: 'Tom',
-      sex: '1',
-      balance: '￥1000.00'
-    },
-    {
-      userID: 'lenovo2',
-      email: '187@qq.com',
-      name: 'Tom',
-      sex: '1',
-      balance: '￥1000.00'
-    },
-    {
-      userID: 'lenovo3',
-      email: '144464@qq.com',
-      name: 'Tom',
-      sex: '1',
-      balance: '￥1000.00'
-    },
-    {
-      userID: 'lenovo4',
-      email: '123144@qq.com',
-      name: 'Tom',
-      sex: '1',
-      balance: '￥1000.00'
-    },
-    {
-      userID: 'lenovo5',
-      email: '1332164@qq.com',
-      name: 'Tom',
-      sex: '1',
-      balance: '￥1000.00'
-    },
-    {
-      userID: 'lenovo6',
-      email: '122221335@qq.com',
-      name: 'Tom',
-      sex: '1',
-      balance: '￥1000.00'
-    },
-    {
-      userID: 'lenovo7',
-      email: '111111@qq.com',
-      name: 'Tom',
-      sex: '1',
-      balance: '￥1000.00'
-    },
-
-  ]
-
   const Pagination= ref({  //分页器
     currentPage: 1, // 当前页
     pageSize: 10, // 每页显示条数
@@ -198,8 +153,11 @@
   })
   const tableData = ref([])
   const getData= () => { //向后端请求数据
-    const request = {email:searchInput.value.email,page:Pagination.value.currentPage,limit:Pagination.value.pageSize}
-    console.log(request)
+    const request = {
+      email:searchInput.value.email,
+      page:Pagination.value.currentPage,
+      limit:Pagination.value.pageSize
+    }
     proxy.$api.adminGetUserList(request).then(res=>{
       if(res.code===0){
         tableData.value=res.data.records
@@ -269,8 +227,6 @@
    
   };
 
-
-
   //选择+批量删除
   const selectedRows=ref([])
 
@@ -280,10 +236,12 @@
 
   const batchDeletion = async () => {
     if (selectedRows.value.length === 0) {
-      alert('请先选择要删除的项');
+      ElMessage({
+        type: 'warning',
+        message: '请先选择需要删除的内容！',
+      })
       return;
     }
-
     // 获取要删除的项邮箱
     const idsToDelete = selectedRows.value.map(row => row.id);
 

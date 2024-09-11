@@ -1,6 +1,6 @@
 <template>
   <div class="userDetailContainer">
-    <el-form :model="detail" label-width="120px" class="user-form">
+    <el-form :rules="rules" :model="detail" label-width="120px" class="user-form">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="用户ID">
@@ -9,7 +9,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="邮箱账号">
+          <el-form-item prop="email" label="邮箱账号">
             <el-input v-model="detail.email" 
             ></el-input>
           </el-form-item>
@@ -18,25 +18,25 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="昵称">
+          <el-form-item prop="nickname" label="昵称">
             <el-input v-model="detail.nickname"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="性别">
-            <el-select v-model="detail.gender" placeholder="请选择性别">
-              <el-option label="男" :value=1></el-option>
-              <el-option label="女" :value=2></el-option>
-              <el-option label="未知" :value=0></el-option>
-            </el-select>
+            <el-radio-group v-model="detail.gender">
+              <el-radio :value=1>男</el-radio>
+              <el-radio :value=2>女</el-radio>
+              <el-radio :value=0>未知</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="余额">
-            <el-input v-model="detail.balance"></el-input>
+          <el-form-item prop="balance" label="余额(￥)">
+            <el-input-number v-model="detail.balance" :precision="2" :step="0.01" controls-position="right"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -59,7 +59,18 @@
     id:String,
   })
 
-  
+  const rules = {
+    email:[
+        { required: true, message: '邮箱不能为空！', trigger: 'blur' }
+    ],
+    nickname: [
+        { required: true, message: '昵称不能为空！', trigger: 'blur' }
+    ],
+    balance: [
+        { required: true, message: '余额不能为空！', trigger: 'blur' }
+    ],
+      
+  }
 
   onMounted(()=>{
     console.log('user id:',props.id)
@@ -69,7 +80,7 @@
     proxy.$api.adminGetUserList(editUser).then(res=>{
       if(res.code===0){
         detail.value=res.data.records[0]
-        console.log(detail.value)
+        detail.value.balance=Number((detail.value.balance / 100).toFixed(2));
       }
     })
   })
@@ -79,37 +90,34 @@
     email: '',
     password:'',
     nickname: '',
-    gender: null,
+    gender: 0,
     balance: ''
   });
 
   
 
   const saveDetails = () => {
-    // Emit the details back to the table page or perform other save actions
-    console.log('保存用户详情:', detail.value);
     const saveVal = detail.value;
-    if(saveVal.email===''){
-      alert('邮箱账号不能为空');
-      return;
-    }
-    else if(saveVal.name===''){
-      alert('昵称不能为空');
-      return;
-    }
-    else if(saveVal.balance===''){
-      alert('余额不能为空');
+    if(
+      saveVal.email===''||
+      saveVal.nickname===''||
+      saveVal.balance===''
+    ){
       return;
     }
     const UpdateUser = {
       gender: saveVal.gender,
       nickname: saveVal.nickname,
       email: saveVal.email,
-      balance: saveVal.balance,
+      balance: Math.floor(detail.value.balance * 100),
       userId:saveVal.id 
     }
     proxy.$api.adminUpdateUser(UpdateUser).then(res=>{
       if(res.code===0){
+        ElMessage({
+          type: 'success',
+          message: '保存成功！',
+        });
         router.replace('/admin/user_list');
       }
     })
@@ -124,7 +132,8 @@
 
 <style scoped>
 .userDetailContainer {
-  padding: 20px;
+  margin: 20px;
+  padding: 40px 20px 20px 20px;
   background-color: #fff;
 }
 
@@ -137,7 +146,11 @@
   margin-bottom: 20px;
 }
 
-.el-button {
+.el-form-item .el-button {
   margin-right: 10px;
+}
+
+.el-form-item .el-input-number{
+  width:100%
 }
 </style>
