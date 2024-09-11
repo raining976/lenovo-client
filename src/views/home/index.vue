@@ -1,7 +1,7 @@
 <template>
   <div class="homeLayout">
     <el-container>
-      <el-header height="60px" class="header">
+      <el-header height="60px" class="header" :class="{ isShadow: isShadow }">
         <div class="headerContainer">
           <router-link to="/" class="homeLink"><img src="@/assets/logo/logo2.png" alt="logo" class="logo"></router-link>
           <appNav v-show="isShow"></appNav>
@@ -18,9 +18,13 @@
 <script setup>
 import { useRoute } from 'vue-router'
 const route = useRoute()
+const isShadow = computed(() => {
+  return (route.path.includes('order_info'))
+})
 const isShow = computed(() => {
   return !(route.name == 'login' || route.name == 'register' || route.name == '404page' || route.name == 'payment_success')
 })
+
 </script>
 
 
@@ -36,6 +40,10 @@ $navHeight : 60px;
   position: sticky;
   top: 0;
   z-index: 999;
+
+  &.isShadow {
+    box-shadow: 0px 0px 8px 0px rgba(181, 181, 181, 0.5);
+  }
 }
 
 .headerContainer {

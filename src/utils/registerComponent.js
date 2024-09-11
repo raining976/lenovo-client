@@ -1,6 +1,6 @@
-import { HomeFilled, Avatar, List, GoodsFilled } from '@element-plus/icons-vue'
+import { HomeFilled, Avatar, List, GoodsFilled, Timer, Wallet, ShoppingCartFull, CircleCheck } from '@element-plus/icons-vue'
 
-const ElIcons = [HomeFilled, Avatar, List, GoodsFilled]
+const ElIcons = [HomeFilled, Avatar, List, GoodsFilled, Timer, Wallet, ShoppingCartFull, CircleCheck]
 
 export const registerComponent = (app) => {
     for (const icon of ElIcons) {
