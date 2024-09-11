@@ -48,16 +48,14 @@ const formData = ref({
 })
 const avatarUrl = ref('')
 onMounted(async () => {
-    updateUserInfo()
-    avatarUrl.value = `https://lenovo.imbai.cn${userStore.userInfo.avatar}`
-    console.log('avatarUrl.value',avatarUrl.value)
+    getUserInfo()
 })
 
 const updateUserInfo = () => {
     for (let i in userStore.userInfo) {
         formData.value[i] = userStore.userInfo[i]
     }
-    avatarUrl.value = `https://lenovo.imbai.cn${formData.avatar}`
+    avatarUrl.value = formData.value.avatar
 }
 
 const { proxy } = getCurrentInstance()
@@ -77,11 +75,12 @@ const changeInfo = () => {
 
 const getUserInfo = () => {
     proxy.$api.getUserInfo().then(res => {
-        // const info = res.data
-        // info.avatar ="https://lenovo.imbai.cn" + info.avatar
-        userStore.setUserInfo(res.data)
+        const info = res.data
+        info.avatar ="https://lenovo.imbai.cn" + info.avatar
+        userStore.setUserInfo(info)
         updateUserInfo()
         isEdit.value = false
+        
     })
 }
 
