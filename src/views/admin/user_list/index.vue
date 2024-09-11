@@ -34,7 +34,7 @@
           <el-table-column prop="email" label="邮箱账号" />
           <el-table-column prop="nickname" label="昵称" />
           <el-table-column prop="gender" label="性别" :formatter="formatSex" />
-          <el-table-column prop="balance" label="余额" />
+          <el-table-column prop="balance" label="余额(￥)" />
           <el-table-column label="操作">
             <template #default="scope">
               <el-button @click="handleEdit(scope.row)" type="primary" size="small">修改</el-button>
@@ -204,6 +204,11 @@
       if(res.code===0){
         tableData.value=res.data.records
         Pagination.value.total=res.data.total 
+        console.log("data=",tableData.value)
+        tableData.value.forEach(item => {
+          // 计算 balance/100
+          item.balance = (item.balance / 100).toFixed(2);
+        });
       }
     })
   }
