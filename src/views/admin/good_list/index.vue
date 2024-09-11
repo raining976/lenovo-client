@@ -94,17 +94,6 @@
         return '未知'
     }
   }
-  const Dataset = [
-    {
-      productId: '12355',
-      name: '小新Pro14 AI元启',
-      brief: '这是商品A的简介。',
-      price: '7499.00',
-      categoryId:3
-    },
-    
-  ];
-  
   
   const Pagination = ref({
     currentPage: 1,
@@ -164,7 +153,6 @@
     )
       .then(() => {
         const request={productId:row.productId};
-        console.log("id:",request)
         proxy.$api.adminDeleteProduct(request).then(res=>{
           if(res.code===0){
             getData();
@@ -197,7 +185,10 @@
 
   const batchDeletion = async () => {
     if (selectedRows.value.length === 0) {
-      alert('请先选择要删除的项');
+      ElMessage({
+        type: 'warning',
+        message: '请先选择需要删除的内容！',
+      })
       return;
     }
 

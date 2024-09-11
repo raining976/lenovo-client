@@ -46,6 +46,7 @@
   
         <el-form-item>
           <el-button type="primary" @click="saveDetails">保存</el-button>
+          <el-button @click="cancel">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -117,9 +118,6 @@ import { onMounted } from 'vue';
     else{                   //新建
       isEdit.value=false;
     }
-    console.log('isEdit:',isEdit.value)
-    // 发起请求 根据该id 获取用户详细信息
-    // 拿到信息后存到dtail对象
   })
   
   const saveDetails = () => {
@@ -130,7 +128,7 @@ import { onMounted } from 'vue';
         productId: detail.value.productId,
         name: detail.value.name,
         brief: detail.value.brief,
-        price: detail.value.price,
+        price: Math.floor(detail.value.price * 100).toString(),
         categoryId:detail.value.categoryId
       }
       if(
@@ -142,7 +140,12 @@ import { onMounted } from 'vue';
       }
       proxy.$api.adminAddNewProduct(request).then(res=>{
         if(res.code===0){
+          ElMessage({
+            type: 'success',
+            message: '保存成功！',
+          });
           router.replace('/admin/good_list');
+          
         }
       })
     }
@@ -155,7 +158,6 @@ import { onMounted } from 'vue';
         price: Math.floor(detail.value.price * 100).toString(),
         categoryId:detail.value.categoryId
       }
-      console.log('保存商品详情:', request);
       if(
         request.productId===''||
         request.name===''||
@@ -165,17 +167,25 @@ import { onMounted } from 'vue';
       }
       proxy.$api.adminUpdateProduct(request).then(res=>{
         if(res.code===0){
+          ElMessage({
+            type: 'success',
+            message: '保存成功！',
+          });
           router.replace('/admin/good_list');
         }
       })
     }
+  };
+  const cancel = () => {
+    router.replace('/admin/good_list'); 
   };
  
 </script>
   
 <style scoped>
   .productDetailContainer {
-    padding: 20px;
+    margin: 20px;
+    padding: 40px 20px 20px 20px;
     background-color: #fff;
   }
   
@@ -188,8 +198,12 @@ import { onMounted } from 'vue';
     margin-bottom: 20px;
   }
   
-  .el-button {
-    margin-right: 0px;
+  .el-form-item .el-button {
+    margin-right: 10px;
+  }
+
+  .el-form-item .el-input-number{
+    width:100%
   }
 </style>
   
