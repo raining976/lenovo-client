@@ -3,8 +3,8 @@
       <div class="tableHeadaddShadow">
         <div class="tableHeadContainer">
           <el-form :inline="true">
-            <el-form-item label="商品ID">
-              <el-input clearable v-model="searchInput.productId" placeholder="请输入商品ID"></el-input>
+            <el-form-item label="商品名称">
+              <el-input clearable v-model="searchInput.productName" placeholder="请输入商品名称"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" :icon="Search" @click="productSearch">查询</el-button>
@@ -21,7 +21,8 @@
   
         <div class="table">
           <el-table
-            :data="filteredProductData.slice((Pagination.currentPage - 1) * Pagination.pageSize, Pagination.pageSize * Pagination.currentPage)"
+            @selection-change="handleSelectionChange"
+            :data="productData"
             stripe
             style="width: 100%"
             :header-cell-style="{'text-align': 'center'}"
@@ -29,10 +30,10 @@
           >
             <el-table-column type="selection" width="55" />
             <el-table-column prop="productId" label="商品ID" />
-            <el-table-column prop="productName" label="商品名称" />
-            <el-table-column prop="description" label="简介" />
-            <el-table-column prop="unitPrice" label="单价" />
-            <el-table-column prop="stockQuantity" label="库存数量" />
+            <el-table-column prop="name" label="商品名称" />
+            <el-table-column prop="brief" label="简介" />
+            <el-table-column prop="price" label="单价(￥)" />
+            <el-table-column prop="categoryId" label="类别" :formatter="formatCategory"/>
             <el-table-column label="管理">
               <template #default="scope">
                 <el-button @click="handleEdit(scope.row)" type="primary" size="small">修改</el-button>
@@ -59,98 +60,203 @@
   </template>
   
   <script setup>
-  import { ref, computed } from 'vue';
+
   import { Search, CirclePlus, Delete } from '@element-plus/icons-vue';
-  import { useRouter } from 'vue-router';
+  import { onMounted } from 'vue';
+  
+  const { proxy } = getCurrentInstance()
   
   const router = useRouter();
   
-  const searchInput = ref({ productId: '' });
+  const searchInput = ref({ productName: '' });
   
+  const formatCategory = (row, column, cellValue) => {
+    switch (cellValue) {
+      case 3:
+        return 'Lenovo电脑'
+      case 4:
+        return 'Lenovo台式机'
+      case 5:
+        return '手机&配件'
+      case 6:
+        return '平板电脑'
+      case 7:
+        return '选件'
+      case 8:
+        return '服务/配件'
+      case 9:
+        return '智能'
+      case 10:
+        return '显示器'
+      case 11:
+        return 'IP周边'
+      default:
+        return '未知'
+    }
+  }
   const Dataset = [
     {
-      productId: 'P12355',
-      productName: '商品A',
-      description: '这是商品A的简介。',
-      unitPrice: '￥100.00',
-      stockQuantity: 50,
+      productId: '12355',
+      name: '小新Pro14 AI元启',
+      brief: '这是商品A的简介。',
+      price: '7499.00',
+      categoryId:3
     },
-    {
-      productId: 'P67890',
-      productName: '商品B',
-      description: '这是商品B的简介。',
-      unitPrice: '￥150.00',
-      stockQuantity: 30,
-    },
-    {
-      productId: 'P11223',
-      productName: '商品C',
-      description: '这是商品C的简介。',
-      unitPrice: '￥200.00',
-      stockQuantity: 20,
-    },
-    {
-      productId: 'P44556',
-      productName: '商品D',
-      description: '这是商品D的简介。',
-      unitPrice: '￥300.00',
-      stockQuantity: 10,
-    },
-    {
-      productId: 'P77889',
-      productName: '商品E',
-      description: '这是商品E的简介。',
-      unitPrice: '￥400.00',
-      stockQuantity: 5,
-    },
+    
   ];
   
-  const productData = ref(Dataset);
   
   const Pagination = ref({
     currentPage: 1,
     pageSize: 10,
-    total: productData.value.length,
+    total: 0,
   });
   
-  const filteredProductData = computed(() => {
-    return productData.value.filter(item => item.productId.includes(searchInput.value.productId));
-  });
+  onMounted(()=>{
+    getData()
+  })
+  const productData = ref([])
+  const getData= () => { //向后端请求数据
+    const request = {
+      productName: searchInput.value.productName,
+      page: Pagination.value.currentPage,
+      limit: Pagination.value.pageSize
+    }
+    proxy.$api.adminGetProductList(request).then(res=>{
+      if(res.code===0){
+        productData.value=res.data.records
+        Pagination.value.total=res.data.total 
+        productData.value.forEach(item => {
+          // 计算 price/100
+          item.price = (item.price / 100).toFixed(2);
+        });
+      }
+    })
+  }
   
-  const handleSizeChange = (val) => {
-    Pagination.value.pageSize = val;
-  };
-  
-  const handleCurrentChange = (val) => {
-    Pagination.value.currentPage = val;
-  };
+  const handleSizeChange = (val) => { //页数改变时
+    productData.value=[]
+    Pagination.value.pageSize=val;
+    Pagination.value.currentPage=1;
+    getData();
+  }
+                   
+  const handleCurrentChange = (val) => { //当前页数改变时
+    productData.value=[]
+    Pagination.value.currentPage=val
+    getData();
+  }
   
   const handleEdit = (row) => {
-    router.push(`/admin/goodsInfo/${row.productId}`)
+    const id="E"+row.id
+    router.push(`/admin/goodsInfo/${id}`)
   }
 
-  const handleDelete = (row) => {
-    const index = productData.value.findIndex(item => item.productId === row.productId);
-    if (index !== -1) {
-      productData.value.splice(index, 1);
-      console.log('已删除商品:', row);
-    } else {
-      console.log('未找到要删除的商品:', row);
+  const handleDelete = async (row) => { //向后端发起删除请求
+    ElMessageBox.confirm(
+      '确认删除？',
+      '警告！',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'danger',
+      }
+    )
+      .then(() => {
+        const request={productId:row.productId};
+        console.log("id:",request)
+        proxy.$api.adminDeleteProduct(request).then(res=>{
+          if(res.code===0){
+            getData();
+          }
+        })
+        ElMessage({
+          type: 'success',
+          message: '删除成功！',
+        })
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: '取消删除。',
+        })
+      })
+
+
+   
+  };
+
+
+
+  //选择+批量删除
+  const selectedRows=ref([])
+
+  const handleSelectionChange=(val)=>{
+    selectedRows.value=val;
+  }
+
+  const batchDeletion = async () => {
+    if (selectedRows.value.length === 0) {
+      alert('请先选择要删除的项');
+      return;
+    }
+
+    // 获取要删除的项id
+    const idsToDelete = selectedRows.value.map(row => row.productId);
+    console.log("dele:",idsToDelete)
+
+    try {
+      await ElMessageBox.confirm(
+        '确认删除？',
+        '警告！',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'danger',
+        }
+      );
+
+      // 创建删除操作的 Promise 数组
+      const deletePromises = idsToDelete.map(productId => {
+        const request = { productId: productId };
+        return proxy.$api.adminDeleteProduct(request);
+      });
+
+      // 等待所有删除操作完成
+      await Promise.all(deletePromises);
+
+      // 获取数据
+      await getData();
+
+      // 显示成功消息
+      ElMessage({
+        type: 'success',
+        message: '删除成功！',
+      });
+    } catch (error) {
+      if (error !== 'cancel') {
+        // 处理删除失败的情况
+        ElMessage({
+          type: 'error',
+          message: '删除失败。',
+        });
+      } else {
+        // 处理取消删除的情况
+        ElMessage({
+          type: 'info',
+          message: '取消删除。',
+        });
+      }
     }
   };
   
-  const batchDeletion = () => {
-    console.log('批量删除:');
-  };
-  
   const productSearch = () => {
-    console.log('查找商品:');
-    handleCurrentChange(1);
-    Pagination.value.total = filteredProductData.value.length;
+    getData();
   };
   
   const addProduct = () => {
-    console.log('新增商品');
+    const id="N"
+    router.push(`/admin/goodsInfo/${id}`)
   };
 </script>
   
