@@ -1,116 +1,155 @@
 <template>
-    <div>
-      <el-form :model="detail" label-width="100px" class="order-form">
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="创建时间">
-              <el-input v-model="detail.creationTime"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="订单号">
-              <el-input v-model="detail.orderNumber"disabled></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-  
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="商品名称">
-              <el-input v-model="detail.productName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="单价">
-              <el-input v-model="detail.unitPrice"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-  
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="数量">
-              <el-input v-model="detail.quantity"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="收货人">
-              <el-input v-model="detail.recipient"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-  
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="总金额">
-              <el-input v-model="detail.totalAmount"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-select v-model="detail.status">
-                <el-option label="待发货" value="待发货"></el-option>
-                <el-option label="待收货" value="待收货"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-  
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="操作">
-              <el-select v-model="detail.paymentStatus">
-                <el-option label="待付款" value="待付款"></el-option>
-                <el-option label="已付款" value="已付款"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-  
-        <el-form-item>
-          <el-button type="primary" @click="saveDetails">保存</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-</template>
-  
-<script setup>
-  
-  const router = useRouter();
-  
-  const props = defineProps({
-    id:String,
-  })
-  const detail = ref({
-    creationTime: '2024-09-05 13:15:00',
-    orderNumber: '5566778899',
-    productName: '商品E',
-    unitPrice: '￥400.00',
-    quantity: 1,
-    recipient: '孙七',
-    totalAmount: '￥400.00',
-    status: '待发货',
-    paymentStatus: '待付款'
-  });
+  <div class="OrderDetailContainer">
+    <el-form :model="detail" label-width="100px" class="order-form">
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <el-form-item label="创建时间">
+            <el-input v-model="detail.createdTime" disabled></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-  onMounted(()=>{
-    console.log('order id:', props.id)
-    // 发起请求 根据该id 获取用户详细信息
-    // 拿到信息后存到dtail对象
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="订单状态">
+            <el-select v-model="detail.status">
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="订单号">
+            <el-input v-model="detail.id" disabled></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="收货人电话">
+            <el-input v-model="detail.phone"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="用户ID">
+            <el-input v-model="detail.userId"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="收货人姓名">
+            <el-input v-model="detail.name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="支付金额">
+            <el-input v-model="detail.payment"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-col :span="24">
+        <el-form-item label="收货地址">
+          <el-input v-model="detail.dz" type="textarea" rows="4"></el-input>
+        </el-form-item>
+      </el-col>
+
+      <el-form-item>
+        <el-button type="primary" @click="saveDetails">保存</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+
+</template>
+
+<script setup>
+import { getCurrentInstance } from 'vue';
+
+const { proxy } = getCurrentInstance();
+const statusOptions = ref([
+  { value: 0, label: '调试' },
+  { value: 1, label: '待付款' },
+  { value: 2, label: '待发货' },
+  { value: 3, label: '待收货' },
+  { value: 4, label: '已完成' },
+])
+const router = useRouter();
+
+const props = defineProps({
+  id: String,
+})
+const detail = ref({
+  "id": 26,
+  "userId": 36,
+  "payment": 114900,
+  "status": 2,
+  "expressName": null,
+  "expressNumber": null,
+  "createdTime": "2024-09-10T15:22:18.358+00:00",
+  "paymentTime": null,
+  "consignTime": null,
+  "endTime": null,
+  "name": "lxn",
+  "phone": "18982045613",
+  "dz": "山东省青岛市黄岛区中国海洋大学",
+  "products": [
+    {
+      "name": "联想平板小新Pad 2024 舒视版11英寸 学习办公平板电脑 鸽子灰",
+      "brief": "Qualcomm Snapdragon 685/8核/Android系统/11英寸/8G/128G/WIFI版/鸽子灰",
+      "count": 1,
+      "picUrl": "https://p3.lefile.cn/product/adminweb/2024/05/13/VkXsAPt51JKw7VR6J9jc6NhMT-3339.jpg"
+    }
+  ]
+});
+
+onMounted(() => {
+  console.log('order id:', props.id)
+  proxy.$api.adminSearchOrder({ orderId: props.id, page: 1, limit: 1 }).then(
+    res => {
+      detail.value = res.data.records[0];
+    }
+  )
+  // 发起请求 根据该id 获取用户详细信息
+  // 拿到信息后存到dtail对象
+})
+
+const saveDetails = () => {
+  // Emit the details back to the table page or perform other save actions
+  console.log('保存订单详情:', detail.value);
+  const saveVal = detail.value;
+  proxy.$api.adminModifyOrder({
+    userId: saveVal.userId,
+    id: saveVal.id,
+    payment: saveVal.payment,
+    create_time: saveVal.createdTime,
+    status: saveVal.status,
+    name: saveVal.name,
+    dz: saveVal.dz,
+    phone: saveVal.phone
   })
-  
-  const saveDetails = () => {
-    router.replace('/admin/order_list');
-  };
+  router.replace('/admin/order_list');
+};
 </script>
-  
+
 <style scoped>
-  .order-form {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  .el-form-item {
-    width: 100%;
-  }
+.OrderDetailContainer {
+  padding: 20px;
+  background-color: #fff;
+}
+
+.order-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.el-form-item {
+  width: 100%;
+}
+
+.el-button {
+  margin-right: 10px;
+}
 </style>
-  
