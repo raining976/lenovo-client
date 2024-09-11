@@ -155,6 +155,15 @@ export default [
                         component: () => import("@/views/user_center/views/my_address.vue")
                     }
                 ]
+            },
+            {
+                path:'/order_info/:id',
+                props: true,
+                meta:{
+                    title:"订单详情",
+                    requiresAuth:true,
+                },
+                component: ()=> import ('@/views/order_info/index.vue')
             }
 
 
