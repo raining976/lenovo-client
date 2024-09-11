@@ -1,6 +1,6 @@
 <template>
     <div class="h-productInfo">
-        <Skeleton :loading="!curConfig.picUrl"/>
+        <Skeleton :loading="!curConfig.picUrl" />
         <div class="productInfoContainer" v-show="curConfig.picUrl">
             <div class="imgContainer">
                 <img v-show="!curConfig.picUrl" src="@/assets/imgs/productInfo.jpg" alt="">
@@ -54,7 +54,7 @@
 import Skeleton from "./components/Skeleton.vue"
 import { CircleCheck } from "@element-plus/icons-vue"
 import handlerGoodConfig from "@/utils/handlerGoodConfig.js"
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 const router = useRouter()
 const { proxy } = getCurrentInstance();
 const props = defineProps({
@@ -92,12 +92,12 @@ const onClickedChoice = (i, c) => {
         }
         return true
     })
-    if(targetIndex != -1){
+    if (targetIndex != -1) {
         const targetId = originalConfigs.value[targetIndex].productCode
-        router.replace(`/product/${targetId}`).then(()=>{
+        router.replace(`/product/${targetId}`).then(() => {
             window.location.reload()
         })
-        console.log('targetId',targetId)
+        console.log('targetId', targetId)
     }
     // const targetId = originalConfigs.value[targetIndex].productCode
 }
@@ -109,8 +109,8 @@ const buyNow = () => {
         price: curConfig.value.price
     }
     router.push({
-        path:'/order_submit',
-        query:orderInfo
+        path: '/order_submit',
+        query: orderInfo
     })
 }
 </script>
@@ -123,16 +123,17 @@ const buyNow = () => {
 
     .productInfoContainer {
         display: flex;
-        justify-content:space-between;
+        justify-content: space-between;
         hight: 100%;
 
         .imgContainer {
             width: 520px;
             height: 100%;
-            margin-right:20px;
-            margin-top:40px;
-            img{
-                width:520px;
+            margin-right: 20px;
+            margin-top: 40px;
+
+            img {
+                width: 520px;
                 height: 520px;
             }
         }
@@ -219,7 +220,9 @@ const buyNow = () => {
                             margin-right: 10px;
                             cursor: pointer;
                             margin: 5px 10px 5px 0;
-
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                             &.active {
                                 border-color: #e1140a;
 

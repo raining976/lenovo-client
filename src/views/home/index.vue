@@ -32,7 +32,7 @@ const isShow = computed(() => {
 $navHeight : 60px;
 
 .header {
-  width: 100vw;
+  // width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;

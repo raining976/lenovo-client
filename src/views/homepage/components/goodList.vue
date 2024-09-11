@@ -114,6 +114,7 @@ const getGoodList = () => {
                     align-items: center;
 
                     .goodName {
+                        padding: 0 15px;
                         height: 36px;
                         line-height: 18px;
                         font-size: 15px;
@@ -122,6 +123,7 @@ const getGoodList = () => {
                         text-align: center;
                         font-weight: 550;
                         margin-top: 10px;
+                        margin-bottom: 10px;
                     }
 
                     .goodConfig {

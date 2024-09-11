@@ -11,7 +11,7 @@
                             </el-icon>
                             <span class="text">{{ statusList[order.status - 1]?.label }}</span>
                         </div>
-                        <el-steps class="stepsContainer" :space="200" :active="order.status - 1"
+                        <el-steps class="stepsContainer" :space="200" :active="order.status-1"
                             finish-status="success">
                             <el-step v-for="(item, i) in statusList" :key="i" :title="item.label"
                                 :icon="item.icon"></el-step>
@@ -49,7 +49,7 @@
                             </div>
                             <div class="orderStatus text">
                                 <span class="label">订单状态：</span>
-                                <span class="value">{{ order.status }}</span>
+                                <span class="value">{{ statusList[order.status - 1]?.label }}</span>
                             </div>
                             <div class="payWay text">
                                 <span class="label">支付方式：</span>
@@ -74,7 +74,7 @@
                         <el-table-column prop="productCode" label="商品编码" />
                         <el-table-column label="单价（元）">
                             <template #default="scope">
-                              {{ (scope.row.price/100).toFixed(2) }}
+                                {{ (scope.row.price / 100).toFixed(2) }}
                             </template>
                         </el-table-column>
                         <el-table-column label="数量">
@@ -84,7 +84,7 @@
                         </el-table-column>
                         <el-table-column label="总价（元）">
                             <template #default="scope">
-                                {{ (scope.row.count * scope.row.price/100).toFixed(2) }}
+                                {{ (scope.row.count * scope.row.price / 100).toFixed(2) }}
                             </template>
                         </el-table-column>
                     </el-table>
@@ -132,7 +132,7 @@ const getOrderInfo = () => {
         userId: userStore.userInfo.id
     }
     proxy.$api.getOrderInfo(form).then(res => {
-        console.log('res.data', res.data)
+        // console.log('res.data', res.data)
         if (res.code == 0) {
             order.value = res.data
 
@@ -153,12 +153,16 @@ const getOrderInfo = () => {
     color: rgb(37, 37, 37);
     text-align: center;
 }
-::v-deep  .cell {
+
+::v-deep .cell {
     text-align: center;
 }
 
 .contentBox ::v-deep .is-success {
     color: #E1140A !important;
+}
+.contentBox ::v-deep .el-step__line-inner{
+    border-color: #E1140A !important;
 }
 </style>
 <style lang="scss" scoped>
@@ -249,6 +253,7 @@ const getOrderInfo = () => {
 
         .goodContainer {
             min-height: 400px;
+
             .goodInfo {
                 display: flex;
                 align-items: center;
