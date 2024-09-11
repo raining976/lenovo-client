@@ -1,6 +1,7 @@
 // router/index.js 
 import { createRouter, createWebHistory } from "vue-router";
 import NProgress from 'nprogress'; // progress bar
+import 'nprogress/nprogress.css'
 import { useAdminStore, useUserStore, useSiteStore} from "@/store";
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
@@ -47,6 +48,7 @@ const router = createRouter({
 
 // 路由前置守卫 主要用来进行鉴权
 router.beforeEach((to, from, next) => {
+    NProgress.start()
     const userStore = useUserStore()
     const adminStore = useAdminStore()
 
@@ -75,6 +77,7 @@ router.beforeEach((to, from, next) => {
 
 // 路由后置守卫 
 router.afterEach((to, from) => {
+    NProgress.done()
     const siteStore = useSiteStore()
     console.log('to.fullPath',to.fullPath)
     if (to.fullPath.includes('admin')) {
