@@ -46,17 +46,31 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="支付金额">
-            <el-input v-model="detail.payment"></el-input>
+            <el-input-number v-model="detail.payment" :precision="2" :step="0.01" controls-position="right"/>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-col :span="24">
         <el-form-item label="收货地址">
-          <el-input v-model="detail.dz" type="textarea" rows="4"></el-input>
+          <el-input v-model="detail.dz" type="textarea" :rows=2></el-input>
         </el-form-item>
       </el-col>
-
+      <el-col :span="24">
+        <el-form-item label="商品详情">
+          <el-table
+            :data="detail.products"
+            style="width: 100%"
+            :header-cell-style="{'text-align': 'center'}"
+            :cell-style="{'text-align': 'center'}"
+          >
+            <el-table-column prop="name" label="商品名称" />
+            <el-table-column prop="brief" label="简介" />
+            <el-table-column prop="price" label="单价(￥)" />
+            <el-table-column prop="count" label="数量" />
+          </el-table>
+        </el-form-item>
+      </el-col>
       <el-form-item>
         <el-button type="primary" @click="saveDetails">保存</el-button>
       </el-form-item>
@@ -82,27 +96,27 @@ const props = defineProps({
   id: String,
 })
 const detail = ref({
-  "id": 26,
-  "userId": 36,
-  "payment": 114900,
-  "status": 2,
-  "expressName": null,
-  "expressNumber": null,
-  "createdTime": "2024-09-10T15:22:18.358+00:00",
-  "paymentTime": null,
-  "consignTime": null,
-  "endTime": null,
-  "name": "lxn",
-  "phone": "18982045613",
-  "dz": "山东省青岛市黄岛区中国海洋大学",
-  "products": [
-    {
-      "name": "联想平板小新Pad 2024 舒视版11英寸 学习办公平板电脑 鸽子灰",
-      "brief": "Qualcomm Snapdragon 685/8核/Android系统/11英寸/8G/128G/WIFI版/鸽子灰",
-      "count": 1,
-      "picUrl": "https://p3.lefile.cn/product/adminweb/2024/05/13/VkXsAPt51JKw7VR6J9jc6NhMT-3339.jpg"
-    }
-  ]
+  // "id": 26,
+  // "userId": 36,
+  // "payment": 114900,
+  // "status": 2,
+  // "expressName": null,
+  // "expressNumber": null,
+  // "createdTime": "2024-09-10T15:22:18.358+00:00",
+  // "paymentTime": null,
+  // "consignTime": null,
+  // "endTime": null,
+  // "name": "lxn",
+  // "phone": "18982045613",
+  // "dz": "山东省青岛市黄岛区中国海洋大学",
+  // "products": [
+  //   {
+  //     "name": "联想平板小新Pad 2024 舒视版11英寸 学习办公平板电脑 鸽子灰",
+  //     "brief": "Qualcomm Snapdragon 685/8核/Android系统/11英寸/8G/128G/WIFI版/鸽子灰",
+  //     "count": 1,
+  //     "picUrl": "https://p3.lefile.cn/product/adminweb/2024/05/13/VkXsAPt51JKw7VR6J9jc6NhMT-3339.jpg"
+  //   }
+  // ]
 });
 
 onMounted(() => {
@@ -110,6 +124,11 @@ onMounted(() => {
   proxy.$api.adminSearchOrder({ orderId: props.id, page: 1, limit: 1 }).then(
     res => {
       detail.value = res.data.records[0];
+      detail.value.products.forEach(item => {
+          // 计算 balance/100
+          item.price = (item.price / 100).toFixed(2);
+        });
+      detail.value.payment=Number((detail.value.payment / 100).toFixed(2));
     }
   )
   // 发起请求 根据该id 获取用户详细信息
@@ -123,7 +142,7 @@ const saveDetails = () => {
   proxy.$api.adminModifyOrder({
     userId: saveVal.userId,
     id: saveVal.id,
-    payment: saveVal.payment,
+    payment: Math.floor(saveVal.payment * 100),
     create_time: saveVal.createdTime,
     status: saveVal.status,
     name: saveVal.name,
@@ -135,21 +154,25 @@ const saveDetails = () => {
 </script>
 
 <style scoped>
-.OrderDetailContainer {
-  padding: 20px;
-  background-color: #fff;
-}
+  .OrderDetailContainer {
+    padding: 20px;
+    background-color: #fff;
+  }
 
-.order-form {
-  max-width: 800px;
-  margin: 0 auto;
-}
+  .order-form {
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-.el-form-item {
-  width: 100%;
-}
+  .el-form-item {
+    width: 100%;
+  }
 
-.el-button {
-  margin-right: 10px;
-}
+  .el-form-item .el-button {
+    margin-right: 10px;
+  }
+
+  .el-form-item .el-input-number{
+    width:100%
+  }
 </style>

@@ -57,9 +57,9 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
   
-  <script setup>
+<script setup>
 
   import { Search, CirclePlus, Delete } from '@element-plus/icons-vue';
   import { onMounted } from 'vue';
@@ -152,7 +152,7 @@
       }
     )
       .then(() => {
-        const request={productId:row.productId};
+        const request={id:row.id};
         proxy.$api.adminDeleteProduct(request).then(res=>{
           if(res.code===0){
             getData();
@@ -193,8 +193,8 @@
     }
 
     // 获取要删除的项id
-    const idsToDelete = selectedRows.value.map(row => row.productId);
-    console.log("dele:",idsToDelete)
+    const idsToDelete = selectedRows.value.map(row => row.id);
+    console.log("idsToDelete:",idsToDelete)
 
     try {
       await ElMessageBox.confirm(
@@ -208,8 +208,8 @@
       );
 
       // 创建删除操作的 Promise 数组
-      const deletePromises = idsToDelete.map(productId => {
-        const request = { productId: productId };
+      const deletePromises = idsToDelete.map(id => {
+        const request = { id: id };
         return proxy.$api.adminDeleteProduct(request);
       });
 

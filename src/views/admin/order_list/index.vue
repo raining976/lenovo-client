@@ -40,10 +40,10 @@
           <el-table-column prop="payment" label="总金额" />
           <el-table-column prop="status" label="状态">
             <template #default="scope">
-              <el-tag type="warning" v-if="scope.row.status === 0">待发货</el-tag>
-              <el-tag type="success" v-if="scope.row.status === 1">待收货</el-tag>
-              <el-tag type="success" v-if="scope.row.status === 2">待付款</el-tag>
-              <el-tag type="success" v-if="scope.row.status === 3">已付款</el-tag>
+              <el-tag type="success" v-if="scope.row.status === 1">待付款</el-tag>
+              <el-tag type="warning" v-if="scope.row.status === 2">待发货</el-tag>
+              <el-tag type="success" v-if="scope.row.status === 3">待收货</el-tag>
+              <el-tag type="success" v-if="scope.row.status === 4">已完成</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="管理">
@@ -79,8 +79,8 @@
           <el-form-item label="备注" label-width="100px">
             <el-input clearable v-model="newOrder.remarks" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="交易金额" label-width="100px">
-            <el-input clearable v-model="newOrder.payment" autocomplete="off" />
+          <el-form-item label="交易金额(￥)" label-width="100px">
+            <el-input-number v-model="newOrder.payment" :precision="2" :step="0.01" controls-position="right"/>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -112,7 +112,6 @@ const Pagination = ref({  //分页器
 });
 const statusOptions = ref([
   { value: '', label: '全部' },
-  { value: 0, label: '调试' },
   { value: 1, label: '待付款' },
   { value: 2, label: '待发货' },
   { value: 3, label: '待收货' },
@@ -132,9 +131,23 @@ const dialogClose = () => {
   isAddOrderVisible.value = false;
 }
 const saveNewOrder = () => {
-  proxy.$api.adminAddOrder(newOrder.value).then(res => {
+  const quest = {
+    userId: newOrder.value.userId,
+    dz: newOrder.value.dz,
+    name: newOrder.value.name,
+    phone: newOrder.value.phone,
+    remarks: newOrder.value.remarks,
+    items: newOrder.value.items,
+    payment: Math.floor(newOrder.value.payment * 100)
+  }
+  
+  proxy.$api.adminAddOrder(quest).then(res => {
     if (res.code === 0) {
       isAddOrderVisible.value = false;
+      ElMessage({
+          type: 'success',
+          message: '保存成功！',
+      });
       getData();
     }
   })
@@ -151,8 +164,9 @@ const getData = () => { //向后端请求数据
   proxy.$api.adminSearchOrder(request).then(res => {
     orderData.value = res.data.records
     Pagination.value.total = res.data.total
-    console.log("res", res)
-    console.log(Pagination.value.total)
+    orderData.value.forEach(item => {
+      item.payment = (item.payment / 100).toFixed(2);
+    });
   }
   )
 }
@@ -188,13 +202,14 @@ const handleDelete = async (row) => {
   ).then(() => {
     proxy.$api.adminDeletOrder({ orderId: row.id }).then(res => {
       if (res.code == 0) {
+        ElMessage({
+          type: 'success',
+          message: '删除成功！'
+        });
         getData();
       }
     });
-    ElMessage({
-      type: 'success',
-      massage: '删除成功！'
-    });
+    
   }).catch(() => {
     ElMessage({
       type: 'info',
@@ -221,7 +236,10 @@ const handleSelectionChange = (val) => {
 
 const batchDeletion = async () => {
   if (selectedRows.value.length === 0) {
-    alert('请先选择要删除的项');
+    ElMessage({
+      type: 'warning',
+      message: '请选择需要删除的订单'
+    })
     return;
   }
 
