@@ -1,15 +1,15 @@
 <template>
   <div class="ordersContainer" >
-    <el-table :data="orderList" stripe style="width: 100%;height: calc(100% - 30px);">
+    <el-table :data="orderList" stripe style="width: 100%;height: calc(100% - 93px);">
       <el-table-column label="订单id" prop="id" width="80px"></el-table-column>
       <el-table-column label="订单状态" prop="status" width="80px">
         <template #default="scope">
           <el-tag :type="orderStatus[scope.row.status-1].type">{{ orderStatus[scope.row.status-1].label }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="商品详情" width="400">
+      <el-table-column label="商品详情" width="380">
         <template #default="scope">
-          <ul class="goodContainer">
+          <div class="goodContainer">
             <li class="good" v-for="(good, index) in scope.row.items" :key="index">
               <div class="imgBox">
                 <img :src="good.picUrl" alt="">
@@ -20,18 +20,22 @@
               </div>
               <div class="countBox">x{{ good.count }}</div>
             </li>
-          </ul>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="创建日期" prop="createdTime">
+      <el-table-column label="创建日期" prop="createdTime" width="200">
         <template #default="scope">
           {{ handlerDate(scope.row.createdTime) }}
         </template>
       </el-table-column>
-
       <el-table-column label="支付金额" prop="payment">
         <template #default="scope">
           ¥ {{(scope.row.payment / 100).toFixed(2) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template #default="scope">
+           <el-button color="#626aef" plain @click="toOrderInfo(scope.row.id)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -43,6 +47,7 @@
 </template>
 <script setup>
 import { useUserStore } from "@/store"
+import router from "@/router"
 const { proxy } = getCurrentInstance();
 const userStore = useUserStore()
 const pageSize = ref(6)
@@ -111,6 +116,12 @@ const curPageChange = (v) => {
 }
 
 
+const toOrderInfo=(id)=>{
+  console.log('id',id)
+  router.push(`/order_info/${id}`)
+
+}
+
 </script>
 <style scoped lang="scss">
 .ordersContainer{
@@ -141,7 +152,7 @@ const curPageChange = (v) => {
     padding: 10px;
 
     .name {
-      width: 280px;
+      width: 250px;
       color: #000;
       font-size: 12px;
       white-space: nowrap;
@@ -150,7 +161,7 @@ const curPageChange = (v) => {
     }
 
     .brief {
-      width: 280px;
+      width: 250px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -163,6 +174,7 @@ const curPageChange = (v) => {
 }
 
 .pageContainer {
+  margin-top: 30px;
   display: flex;
   justify-content: center;
 }
