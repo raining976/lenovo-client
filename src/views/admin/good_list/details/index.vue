@@ -68,7 +68,30 @@
   })
   
   const saveDetails = () => {
-    // Emit the details back to the table page or perform other save actions
+
+  console.log('保存商品详情:', detail.value);
+  const saveVal = detail.value;
+
+  if(saveVal.productId === ''){
+    alert('商品ID不能为空');
+    return;
+  }
+  else if(saveVal.productName === ''){
+    alert('商品名称不能为空');
+    return;
+  }
+  else if(saveVal.description === ''){
+    alert('商品描述不能为空');
+    return;
+  }
+  else if(saveVal.unitPrice === ''){
+    alert('单价不能为空');
+    return;
+  }
+  else if(saveVal.stockQuantity === ''){
+    alert('库存数量不能为空');
+    return;
+  }
     console.log('保存商品详情:', detail.value);
     router.replace('/admin/good_list'); // Return to the product list after saving
   };
